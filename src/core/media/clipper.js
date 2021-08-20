@@ -1,4 +1,4 @@
-const proc = require('./proc');
+const proc = require('../proc');
 
 // NOTE: Overwrites the original file
 const clip = async (input, output, start, duration) => 

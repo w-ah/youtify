@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // includes
-const proc = require('./proc');
+const proc = require('../proc');
 
 const mp3_file_to_raw_file = async (file) => 
 {
@@ -45,8 +45,6 @@ const mp3_file_to_raw_file = async (file) =>
 
 const mp3_file_to_ogg_file = async (file) => 
 {
-    
-
     const normPath = path.normalize(file);
     const pathNoExt = normPath.replace(/.mp3/, '');
 
@@ -64,9 +62,31 @@ const mp3_file_to_ogg_file = async (file) =>
         const cmdExpr = `ffmpeg -i "${mp3Path}" -c:a libvorbis -q:a 4 "${oggPath}"`;
         await proc.run_shell(cmdExpr);
     }
+} 
+
+const mp4_file_to_mp3_file = async (file) => 
+{
+    const normPath = path.normalize(file);
+    const pathNoExt = normPath.replace(/.mp4/, '');
+
+    const mp4Path = `${pathNoExt}.mp4`;
+    const mp3Path = `${pathNoExt}.mp3`;
+
+    // Clean up any previous conversion results
+    if(fs.existsSync(mp3Path))
+    {
+        fs.rmSync(wavPath, { recursive: true });
+    }
+    
+    // Convert mp4 to mp3
+    {
+        const cmdExpr = `ffmpeg -i ${mp4Path} ${mp3Path}`;
+        await proc.run_shell(cmdExpr);
+    }
 }
 
 module.exports = {
     mp3_file_to_raw_file,
-    mp3_file_to_ogg_file
+    mp3_file_to_ogg_file,
+    mp4_file_to_mp3_file
 }

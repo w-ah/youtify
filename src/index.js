@@ -1,3 +1,7 @@
+// 3rd party includes
+require('dotenv').config(); // set env vars from .env file
+
+// includes
 const youtify = require('./core/youtify_main');
 
 const main = async () => 
@@ -7,6 +11,7 @@ const main = async () =>
     await youtify.start();
 
     console.log("Exiting...");
+    process.exit(0);
 }
 
 main();
