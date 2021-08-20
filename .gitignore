@@ -1,0 +1,5 @@
+node_modules
+.vscode
+music.mp3
+src/tmp
+src/core/shazam/script.py
