@@ -14,6 +14,20 @@ const retry = require('./utils/retry');
 
 const { TMP_DIR, TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP, DATA_DIR } = require('./constants');
 
+const start = async () => 
+{
+    await init();
+
+    const { channels } = store.config;
+
+    console.log("Processing channels...");
+    for(const channel of channels)
+    {
+        console.log("Processing channel: ", channel);
+        await add_channel_tracks_to_spotify_playlist({ channel });
+    }
+}
+
 const init = async () => 
 {
     // Load config
@@ -40,27 +54,16 @@ const init = async () =>
     await db.init();
 }
 
-const start = async () => 
-{
-    await init();
-
-    const { channels } = store.config;
-
-    for(const channel of channels)
-    {
-        await add_channel_tracks_to_spotify_playlist({ channel });
-    }
-}
-
 const add_channel_tracks_to_spotify_playlist = async ({ channel }) => 
 {
     console.log("Getting channel video urls...")
     const urls = await youtube.get_channel_video_urls(channel);
     
     // TODO: Parallel
-    console.log("Processing...");
+    console.log("Processing videos...");
     for(url of urls)
     {
+        console.log("Processing video: ", url);
         await add_url_track_clips_to_spotify_playlist({ channel, url });
     }
 }
@@ -70,7 +73,7 @@ const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) =>
     const ytUrl = url;
 
     // Download youtube video
-    console.log("Downloading youtube video...");
+    console.log("Downloading video...");
     // TODO: Retryable
     await youtube.download_video(ytUrl, TMP_VID);
 
@@ -80,13 +83,16 @@ const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) =>
 
     // Get audio track length
     // Split track into multiple clips
+    const duration = 7;
     const clips = [
-        { start: 10, duration: 5 }
+        10, 30, 60
     ];
     // Loops the clips
-    for(clip of clips)
+    console.log("Processing audio clips...");
+    for(const start of clips)
     {
-        await add_track_clip_to_spotify_playlist(channel, clip);
+        console.log("Processing audio clip: t =", start);
+        await add_track_clip_to_spotify_playlist(channel, { start, duration });
     }
 }
 
@@ -104,6 +110,10 @@ const add_track_clip_to_spotify_playlist = async (channel, { start, duration }) 
     }
     catch(e)
     {
+        if(store.config.debug)
+        {
+            console.log(e);
+        }
         // skip
     }
     await media.clip(TMP_AUDIO, TMP_AUDIO_CLIP, start, duration);

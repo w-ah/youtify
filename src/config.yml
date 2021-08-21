@@ -1,7 +1,8 @@
-debug: false
+debug: true
 # List of YouTube channels to create playlists for
 channels:
-  - chloechuaviolinist
+  - enesyilmazer
+  # - chloechuaviolinist
   # - adelelondon
 # List of specific youtube urls to add to general YouTube playlist.
 # videos:

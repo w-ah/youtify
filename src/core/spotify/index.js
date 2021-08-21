@@ -95,7 +95,7 @@ const load_auth_code = async () =>
     await browser.close();
     await new Promise(resolve => 
     {
-        server.removeListener(serverListener);
+        server.removeAllListeners('request');
         server.close(resolve)
     });
 }
