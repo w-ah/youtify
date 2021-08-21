@@ -23,12 +23,17 @@ const create = async () =>
 
 const add_clip = async ({ youtube_url, spotify_playlist_id, start, duration }) => 
 {
+    if(await clip_exists({ youtube_url, spotify_playlist_id, start, duration }))
+    {
+        // Skip
+        return;
+    }
+
     const db = await dbm.get_handle();
 
     await db.run(`
         INSERT INTO ${TABLE_NAME} ( youtube_url, spotify_playlist_id, start, duration )
-        VALUES ('${youtube_url}', '${spotify_playlist_id}', '${start}', '${duration}'),
-        WHERE NOT EXISTS (SELECT 1 FROM ${TABLE_NAME} WHERE youtube_url='${youtube_url}' AND spotify_playlist_id='${spotify_playlist_id}' AND start='${start}' AND duration='${duration}')
+        VALUES ('${youtube_url}', '${spotify_playlist_id}', '${start}', '${duration}')
     `);
 }
 

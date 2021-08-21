@@ -104,6 +104,11 @@ const add_track_clip_to_spotify_playlist = async ({ channel, url }, { start, dur
         return;
     }
 
+    // Get / Create playlist
+    const playlistDetails = await spotify.get_or_create_playlist_by_name(channel);
+    const { id: playlistId } = playlistDetails;
+    await db.spotify_playlists.add_playlist({ id: playlistId, name: channel });
+
     // TODO: What is the best length and where should we sample this from a longer clip?
 
     // Clip
@@ -157,12 +162,6 @@ const add_track_clip_to_spotify_playlist = async ({ channel, url }, { start, dur
 
             console.log("Adding track to Spotify playlist...");
 
-            // Get / Create playlist
-            const playlistDetails = await spotify.get_or_create_playlist_by_name(channel);
-            const { id: playlistId } = playlistDetails;
-
-            await db.spotify_playlists.add_playlist({ id: playlistId, name: channel });
-
             // Add track to playlist
             await spotify.add_to_playlist(playlistId, trackUri);
         }
@@ -170,14 +169,15 @@ const add_track_clip_to_spotify_playlist = async ({ channel, url }, { start, dur
         {
             console.log("Failed to find audio on Spotify");
         }
-
-        // track processed clips so we can skip processing in future.
-        await db.audio_clips.add_clip({ 
-            youtube_url: url, 
-            spotify_playlist_id: playlistId, 
-            start, 
-            duration });
     }
+
+    // track processed clips so we can skip processing in future.
+    await db.audio_clips.add_clip({ 
+        youtube_url: url, 
+        spotify_playlist_id: playlistId, 
+        start, 
+        duration 
+    });
 }
 
 const processed_clip_guard = async ({ channel, url }, { start, duration }) => 

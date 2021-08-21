@@ -21,12 +21,17 @@ const create = async () =>
 
 const add_playlist = async ({ id, name }) => 
 {
+    if(await playlist_exists({ name }))
+    {
+        // Skip
+        return;
+    }
+
     const db = await dbm.get_handle();
 
     await db.run(`
         INSERT INTO ${TABLE_NAME} ( id, name )
         VALUES ('${id}', '${name}')
-        WHERE NOT EXISTS (SELECT 1 FROM ${TABLE_NAME} WHERE id='${id}' AND name='${name}')
     `);
 }
 
@@ -40,6 +45,13 @@ const get_playlist_by_name = async ({ name }) =>
     `);
 
     return playlist;
+}
+
+const playlist_exists = async ({ name }) => 
+{
+    const playlist = await get_playlist_by_name({ name });
+
+    return playlist ? true : false;
 }
 
 module.exports = {
