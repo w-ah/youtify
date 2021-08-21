@@ -10,8 +10,6 @@ const shazam = require('./shazam');
 const youtube = require('./youtube');
 const spotify = require('./spotify');
 
-const retry = require('./utils/retry');
-
 const { TMP_DIR, TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP, DATA_DIR } = require('./constants');
 
 const start = async () => 
@@ -21,7 +19,7 @@ const start = async () =>
     const { channels } = store.config;
 
     console.log("Processing channels...");
-    for(const channel of channels)
+    for(const channel of channels.map(c => c.toLowerCase()))
     {
         console.log("Processing channel: ", channel);
         await add_channel_tracks_to_spotify_playlist({ channel });

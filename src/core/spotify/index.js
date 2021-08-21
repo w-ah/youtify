@@ -28,6 +28,8 @@ const load_auth_code = async () =>
 
     AUTH_CODE = await new Promise(async (resolve, reject) => 
     {
+        let closed = false;
+
         // Listen for auth code callback
         const serverListener = async (req, res) => {
             // Immediately end request
@@ -39,6 +41,7 @@ const load_auth_code = async () =>
                 .replace('/callback?code=', '')
                 .replace('&state=', '');
 
+            closed = true;
             resolve(auth_code);
         };
         server.addListener('request', serverListener);
@@ -67,9 +70,16 @@ const load_auth_code = async () =>
             console.log("Logging in...")
             await page.click('button#login-button');
 
+            // Guard against if we have already closed the browser and
+            // handled the auth_code in the server request listener.
+            if(closed)
+            {
+                return;
+            }
+
             // if there is a verify/accept/aggree permissions button
             try 
-            {
+            {  
                 console.log("Accepting permissions...");
                 await page.waitForNavigation();
                 if(await page.$('button#auth-accept'))
