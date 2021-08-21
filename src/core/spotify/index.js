@@ -29,7 +29,7 @@ const load_auth_code = async () =>
     AUTH_CODE = await new Promise(async (resolve, reject) => 
     {
         // Listen for auth code callback
-        server.addListener('request', async (req, res) => {
+        const serverListener = async (req, res) => {
             // Immediately end request
             res.end();
         
@@ -40,7 +40,8 @@ const load_auth_code = async () =>
                 .replace('&state=', '');
 
             resolve(auth_code);
-        });
+        };
+        server.addListener('request', serverListener);
         server.listen(7777);
 
         const scopes = ['user-read-private', 'user-read-email', 'playlist-modify-private', 'playlist-modify-public'];
@@ -92,7 +93,11 @@ const load_auth_code = async () =>
     });
 
     await browser.close();
-    await new Promise(resolve => server.close(resolve));
+    await new Promise(resolve => 
+    {
+        server.removeListener(serverListener);
+        server.close(resolve)
+    });
 }
 
 const refresh_access_token = async () => 
@@ -108,7 +113,7 @@ const refresh_access_token = async () =>
         console.log('The access token is ' + access_token);
         console.log('The refresh token is ' + refresh_token);
     }
-    
+
     // Set the access token on the API object to use it in later calls
     SPOTIFY_API.setAccessToken(access_token);
     SPOTIFY_API.setRefreshToken(refresh_token);

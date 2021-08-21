@@ -44,7 +44,7 @@ const start = async () =>
 {
     await init();
 
-    const channels = store.config;
+    const { channels } = store.config;
 
     for(const channel of channels)
     {
@@ -61,11 +61,11 @@ const add_channel_tracks_to_spotify_playlist = async ({ channel }) =>
     console.log("Processing...");
     for(url of urls)
     {
-        await add_url_track_to_spotify_playlist({ channel, url });
+        await add_url_track_clips_to_spotify_playlist({ channel, url });
     }
 }
 
-const add_url_track_to_spotify_playlist = async ({ channel, url }) => 
+const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) => 
 {
     const ytUrl = url;
 
@@ -78,16 +78,35 @@ const add_url_track_to_spotify_playlist = async ({ channel, url }) =>
     console.log("Extracting video audio...");
     await media.mp4_file_to_mp3_file(TMP_VID);
 
+    // Get audio track length
+    // Split track into multiple clips
+    const clips = [
+        { start: 10, duration: 5 }
+    ];
+    // Loops the clips
+    for(clip of clips)
+    {
+        await add_track_clip_to_spotify_playlist(channel, clip);
+    }
+}
+
+const add_track_clip_to_spotify_playlist = async (channel, { start, duration }) => 
+{
     // Clip to 5 seconds - TODO: What is the best length and where should we
     // sample this from a longer clip?
     // NOTE: For now we just clip the start of the given file. Could generate multiple clips in future?
 
     // Clip
     console.log("Clipping audio...");
-    const clipIntro = 5; // seconds
-    const clipDuration = 5; // seconds
-    fs.copyFileSync(TMP_VID_AUDIO, TMP_AUDIO);
-    await media.clip(TMP_AUDIO, TMP_AUDIO_CLIP, clipIntro, clipDuration);
+    try
+    {
+        fs.copyFileSync(TMP_VID_AUDIO, TMP_AUDIO);
+    }
+    catch(e)
+    {
+        // skip
+    }
+    await media.clip(TMP_AUDIO, TMP_AUDIO_CLIP, start, duration);
 
     // Convert to ogg
     console.log("Converting audio to ogg...");
