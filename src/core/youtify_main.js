@@ -3,15 +3,16 @@ const fs = require('fs');
 
 // includes
 const config = require('./config_service');
+const db = require('./db');
 const store = require('./shared_store');
 const media = require('./media');
 const shazam = require('./shazam');
 const youtube = require('./youtube');
 const spotify = require('./spotify');
 
-const { TMP_DIR, TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP, DATA_DIR } = require('./constants');
+const retry = require('./utils/retry');
 
-const db = require('./db');
+const { TMP_DIR, TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP, DATA_DIR } = require('./constants');
 
 const init = async () => 
 {
@@ -47,7 +48,8 @@ const start = async () =>
 
     // Download youtube video
     console.log("Downloading youtube video...");
-    await youtube.download_video(ytUrl, TMP_VID);
+    // TODO: Retryable
+    await retry(youtube.download_video)(ytUrl, TMP_VID);
 
     // Convert video to mp3
     console.log("Extracting video audio...");
@@ -59,9 +61,10 @@ const start = async () =>
 
     // Clip
     console.log("Clipping audio...");
-    const clipIntro = 5; // Intro length
+    const clipIntro = 5; // seconds
+    const clipDuration = 5; // seconds
     fs.copyFileSync(TMP_VID_AUDIO, TMP_AUDIO);
-    await media.clip(TMP_AUDIO, TMP_AUDIO_CLIP, clipIntro, 5);
+    await media.clip(TMP_AUDIO, TMP_AUDIO_CLIP, clipIntro, clipDuration);
 
     // Convert to ogg
     console.log("Converting audio to ogg...");
