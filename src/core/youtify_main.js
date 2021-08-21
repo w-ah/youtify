@@ -44,8 +44,16 @@ const start = async () =>
 {
     await init();
 
-    const channel = store.config.channels[0];
+    const channels = store.config;
 
+    for(const channel of channels)
+    {
+        await add_channel_tracks_to_spotify_playlist({ channel });
+    }
+}
+
+const add_channel_tracks_to_spotify_playlist = async ({ channel }) => 
+{
     console.log("Getting channel video urls...")
     const urls = await youtube.get_channel_video_urls(channel);
     
@@ -54,7 +62,7 @@ const start = async () =>
     for(url of urls)
     {
         await add_url_track_to_spotify_playlist({ channel, url });
-    }    
+    }
 }
 
 const add_url_track_to_spotify_playlist = async ({ channel, url }) => 
