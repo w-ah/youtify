@@ -37,10 +37,11 @@ const get_channel_video_urls = async (name) =>
     }); 
     const page = await browser.newPage();
 
+    const lName = name.toLowerCase();
     let pageUrls = [
-        `https://www.youtube.com/c/${name.toLowerCase()}/videos`,
-        `https://www.youtube.com/user/${name.toLowerCase()}/videos`,
-        `https://www.youtube.com/${name.toLowerCase()}/videos`
+        `https://www.youtube.com/c/${lName}/videos`,
+        `https://www.youtube.com/user/${lName}/videos`,
+        `https://www.youtube.com/${lName}/videos`
     ];
     const videoUrls = [];
     let done = false;

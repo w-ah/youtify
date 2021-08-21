@@ -1,6 +1,6 @@
 // includes
 const manager = require('./manager');
-const spotify_playlists = require('./spotify-playlists');
+const spotify_playlists = require('./spotify_playlists');
 
 const init = async () => 
 {

@@ -54,7 +54,7 @@ const mp3_file_to_ogg_file = async (file) =>
     // Clean up any previous conversion results
     if(fs.existsSync(oggPath))
     {
-        fs.rmSync(wavPath, { recursive: true });
+        fs.rmSync(oggPath, { recursive: true });
     }
 
     // Convert mp3 to ogg
@@ -75,7 +75,7 @@ const mp4_file_to_mp3_file = async (file) =>
     // Clean up any previous conversion results
     if(fs.existsSync(mp3Path))
     {
-        fs.rmSync(wavPath, { recursive: true });
+        fs.rmSync(mp3Path, { recursive: true });
     }
     
     // Convert mp4 to mp3

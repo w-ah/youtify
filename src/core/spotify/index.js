@@ -99,14 +99,19 @@ const refresh_access_token = async () =>
 {
     // Retrieve an access token and a refresh token
     const data = await SPOTIFY_API.authorizationCodeGrant(AUTH_CODE);
-    
-    console.log('The token expires in ' + data.body['expires_in']);
-    console.log('The access token is ' + data.body['access_token']);
-    console.log('The refresh token is ' + data.body['refresh_token']);
 
+    const { expires_in, access_token, refresh_token } = data.body;
+
+    if(store.config.debug)
+    {
+        console.log('The token expires in ' + expires_in);
+        console.log('The access token is ' + access_token);
+        console.log('The refresh token is ' + refresh_token);
+    }
+    
     // Set the access token on the API object to use it in later calls
-    SPOTIFY_API.setAccessToken(data.body['access_token']);
-    SPOTIFY_API.setRefreshToken(data.body['refresh_token']);
+    SPOTIFY_API.setAccessToken(access_token);
+    SPOTIFY_API.setRefreshToken(refresh_token);
 
     await SPOTIFY_API.refreshAccessToken();
 }
@@ -139,10 +144,10 @@ const add_to_playlist = async (playlistId, trackUri) =>
 {
     await authenticate_user_guard();
 
+    // Check if track already added
     const data = await SPOTIFY_API.getPlaylistTracks(playlistId);
     const details = data.body;
     const tracks = details.items.map(i => i.track);
-
     const track = tracks.find(t => t.uri === trackUri);
 
     if(track)

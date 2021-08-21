@@ -1,4 +1,4 @@
-const timeoutFn = require('./timeout');
+const run_for_fn = require('./run_for');
 
 const retryFn = (fn, options) => 
 {
@@ -15,7 +15,7 @@ const retryFn = (fn, options) =>
             {
                 try 
                 {
-                    const data = await timeoutFn(fn, timeout)(...args);
+                    const data = await run_for_fn(fn, timeout)(...args);
                     return data;
                 }
                 catch(e)

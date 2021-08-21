@@ -45,14 +45,26 @@ const start = async () =>
     await init();
 
     const channel = store.config.channels[0];
-    const urls = await youtube.get_channel_video_urls(channel);
 
-    const ytUrl = urls[0];
+    console.log("Getting channel video urls...")
+    const urls = await youtube.get_channel_video_urls(channel);
+    
+    // TODO: Parallel
+    console.log("Processing...");
+    for(url of urls)
+    {
+        await add_url_track_to_spotify_playlist({ channel, url });
+    }    
+}
+
+const add_url_track_to_spotify_playlist = async ({ channel, url }) => 
+{
+    const ytUrl = url;
 
     // Download youtube video
     console.log("Downloading youtube video...");
     // TODO: Retryable
-    await retry(youtube.download_video)(ytUrl, TMP_VID);
+    await youtube.download_video(ytUrl, TMP_VID);
 
     // Convert video to mp3
     console.log("Extracting video audio...");
@@ -101,6 +113,8 @@ const start = async () =>
         {
             const trackDetails = searchResult.tracks.items[0];
             const { uri: trackUri } = trackDetails;
+
+            console.log("Adding track to Spotify playlist...");
 
             // Get / Create playlist
             const playlistDetails = await spotify.get_or_create_playlist_by_name(channel);
