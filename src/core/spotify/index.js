@@ -24,7 +24,7 @@ const server = http.createServer();
 const load_auth_code = async () => 
 {
     // Open browser 
-    const browser = await puppeteer.launch({ headless: false, userDataDir: BROWSER_DATA_DIR }); 
+    const browser = await puppeteer.launch({ headless: store.config.headless, userDataDir: BROWSER_DATA_DIR }); 
 
     AUTH_CODE = await new Promise(async (resolve, reject) => 
     {
@@ -69,6 +69,7 @@ const load_auth_code = async () =>
 
             console.log("Logging in...")
             await page.click('button#login-button');
+            await page.waitForNavigation();
 
             // Guard against if we have already closed the browser and
             // handled the auth_code in the server request listener.
@@ -81,10 +82,10 @@ const load_auth_code = async () =>
             try 
             {  
                 console.log("Accepting permissions...");
-                await page.waitForNavigation();
                 if(await page.$('button#auth-accept'))
                 {
                     await page.click('button#auth-accept');
+                    await page.waitForNavigation();
                     console.log("Finished auth");
                 }
             }

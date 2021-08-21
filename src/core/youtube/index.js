@@ -1,10 +1,10 @@
 // 3rd party includes
 const fs = require('fs');
-const path = require('path');
 const ytdl = require('ytdl-core');
 const puppeteer = require('puppeteer');
 
 // includes
+const store = require('../shared_store');
 const { BROWSER_DATA_DIR } = require('../constants');
 
 const download_video = (url, outFile) => 
@@ -28,7 +28,7 @@ const download_video = (url, outFile) =>
 const get_channel_video_urls = async (name) => 
 {
     const browser = await puppeteer.launch({ 
-        headless: false, 
+        headless: store.config.headless, 
         userDataDir: BROWSER_DATA_DIR, 
         defaultViewport: { 
             width: 1920, 

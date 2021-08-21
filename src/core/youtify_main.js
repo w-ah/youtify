@@ -56,24 +56,26 @@ const add_channel_tracks_to_spotify_playlist = async ({ channel }) =>
 {
     console.log("Getting channel video urls...")
     const urls = await youtube.get_channel_video_urls(channel);
+
+    console.log(`Got ${urls.length} video urls`);
     
     // TODO: Parallel
     console.log("Processing videos...");
-    for(url of urls)
+    for(let i = 0; i < urls.length; ++i)
     {
-        console.log("Processing video: ", url);
+        const url = urls[i];
+        console.log(`Processing video ${i + 1} of ${urls.length}: ${url}`);
         await add_url_track_clips_to_spotify_playlist({ channel, url });
     }
 }
 
 const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) => 
 {
-    const ytUrl = url;
-
     // Download youtube video
     console.log("Downloading video...");
     // TODO: Retryable
-    await youtube.download_video(ytUrl, TMP_VID);
+    // TODO: Is there something better we can do for longer videos? - Just download the part we need for a given clip within the clip method?
+    await youtube.download_video(url, TMP_VID);
 
     // Convert video to mp3
     console.log("Extracting video audio...");
@@ -81,24 +83,28 @@ const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) =>
 
     // Get audio track length
     // Split track into multiple clips
-    const duration = 7;
+    const duration = 5;
     const clips = [
-        10, 30, 60
+        10, 20, 30, 40, 50 , 60
     ];
     // Loops the clips
     console.log("Processing audio clips...");
     for(const start of clips)
     {
         console.log("Processing audio clip: t =", start);
-        await add_track_clip_to_spotify_playlist(channel, { start, duration });
+        await add_track_clip_to_spotify_playlist({ channel, url }, { start, duration });
     }
 }
 
-const add_track_clip_to_spotify_playlist = async (channel, { start, duration }) => 
+const add_track_clip_to_spotify_playlist = async ({ channel, url }, { start, duration }) => 
 {
-    // Clip to 5 seconds - TODO: What is the best length and where should we
-    // sample this from a longer clip?
-    // NOTE: For now we just clip the start of the given file. Could generate multiple clips in future?
+    if(await processed_clip_guard({ channel, url }, { start, duration }))
+    {
+        console.log("Audio clip already processed. Skipping...");
+        return;
+    }
+
+    // TODO: What is the best length and where should we sample this from a longer clip?
 
     // Clip
     console.log("Clipping audio...");
@@ -164,6 +170,30 @@ const add_track_clip_to_spotify_playlist = async (channel, { start, duration }) 
         {
             console.log("Failed to find audio on Spotify");
         }
+
+        // track processed clips so we can skip processing in future.
+        await db.audio_clips.add_clip({ 
+            youtube_url: url, 
+            spotify_playlist_id: playlistId, 
+            start, 
+            duration });
+    }
+}
+
+const processed_clip_guard = async ({ channel, url }, { start, duration }) => 
+{
+    // Check we have not already processed this clip at some point in the past
+    const playlist = await db.spotify_playlists.get_playlist_by_name({ name: channel });
+    if(playlist)
+    {
+        const clip_exists = await db.audio_clips.clip_exists({
+            youtube_url: url,
+            spotify_playlist_id: playlist.id,
+            start,
+            duration
+        });
+
+        return clip_exists;
     }
 }
 
