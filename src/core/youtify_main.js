@@ -44,7 +44,10 @@ const start = async () =>
 {
     await init();
 
-    const ytUrl = store.config.videos[0];
+    const channel = store.config.channels[0];
+    const urls = await youtube.get_channel_video_urls(channel);
+
+    const ytUrl = urls[0];
 
     // Download youtube video
     console.log("Downloading youtube video...");
@@ -100,13 +103,13 @@ const start = async () =>
             const { uri: trackUri } = trackDetails;
 
             // Get / Create playlist
-            const playlistDetails = await spotify.get_or_create_playlist_by_name("Testing123");
+            const playlistDetails = await spotify.get_or_create_playlist_by_name(channel);
             const { id: playlistId } = playlistDetails;
+
+            await db.spotify_playlists.add_playlist({ id: playlistId, name: channel });
 
             // Add track to playlist
             await spotify.add_to_playlist(playlistId, trackUri);
-            
-
         }
         else 
         {
