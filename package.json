@@ -23,6 +23,8 @@
     "lazer-js": "^1.4.5",
     "puppeteer": "^10.2.0",
     "spotify-web-api-node": "^5.0.2",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2",
     "ytdl-core": "^4.9.1"
   }
 }

@@ -1,32 +1,49 @@
 // 3rd party includes
 const fs = require('fs');
-const path = require('path');
 
 // includes
 const config = require('./config_service');
 const store = require('./shared_store');
-const music_clipper = require('./media/clipper');
-const music_converter = require('./media/converter');
+const media = require('./media');
 const shazam = require('./shazam');
 const youtube = require('./youtube');
 const spotify = require('./spotify');
 
-const { TMP_DIR, TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP } = require('./constants');
+const { TMP_DIR, TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP, DATA_DIR } = require('./constants');
 
-const start = async () => 
+const db = require('./db');
+
+const init = async () => 
 {
     // Load config
     config.load();
 
+    if(store.config.debug)
+    {
+        console.log("Using config: \n", JSON.stringify(store.config, null, 4));
+    }
+
     // Cleanup
+    console.log("Cleaning up old temporary files...");
     if(fs.existsSync(TMP_DIR))
     {
         fs.rmSync(TMP_DIR, { recursive: true });
     }
 
+    // Init data dirs
     fs.mkdirSync(TMP_DIR, { recursive: true });
+    fs.mkdirSync(DATA_DIR, { recursive: true });
 
-    const ytUrl = 'https://www.youtube.com/watch?v=ZbZSe6N_BXs';
+    // Init db
+    console.log("Initialising DB...");
+    await db.init();
+}
+
+const start = async () => 
+{
+    await init();
+
+    const ytUrl = store.config.videos[0];
 
     // Download youtube video
     console.log("Downloading youtube video...");
@@ -34,7 +51,7 @@ const start = async () =>
 
     // Convert video to mp3
     console.log("Extracting video audio...");
-    await music_converter.mp4_file_to_mp3_file(TMP_VID);
+    await media.mp4_file_to_mp3_file(TMP_VID);
 
     // Clip to 5 seconds - TODO: What is the best length and where should we
     // sample this from a longer clip?
@@ -44,11 +61,11 @@ const start = async () =>
     console.log("Clipping audio...");
     const clipIntro = 5; // Intro length
     fs.copyFileSync(TMP_VID_AUDIO, TMP_AUDIO);
-    await music_clipper.clip(TMP_AUDIO, TMP_AUDIO_CLIP, clipIntro, 5);
+    await media.clip(TMP_AUDIO, TMP_AUDIO_CLIP, clipIntro, 5);
 
     // Convert to ogg
     console.log("Converting audio to ogg...");
-    await music_converter.mp3_file_to_ogg_file(TMP_AUDIO_CLIP);
+    await media.mp3_file_to_ogg_file(TMP_AUDIO_CLIP);
 
     // Send to shazam to get back matching song details
     console.log("Getting audio details via Shazam...");
@@ -72,23 +89,26 @@ const start = async () =>
 
         // Search spotify for song
         console.log("Searching Spotify...");
-        const searchResult = await spotify.get_track(`artist:${artist} title:${title}`);
+        const searchResult = await spotify.search_track(`${artist} ${title}`);
 
         if(searchResult.tracks.items.length > 0)
         {
-            console.log("Found...");
-            const result = searchResult.tracks.items[0];
-            console.log(result);
+            const trackDetails = searchResult.tracks.items[0];
+            const { uri: trackUri } = trackDetails;
+
+            // Get / Create playlist
+            const playlistDetails = await spotify.get_or_create_playlist_by_name("Testing123");
+            const { id: playlistId } = playlistDetails;
+
+            // Add track to playlist
+            await spotify.add_to_playlist(playlistId, trackUri);
+            
+
         }
-
-        // TODO
-        
-        // // Create playlist
-        // await spotify.create_playlist("Testing123");
-
-        // // Add song to playlist
-        // await spotify.add_to_playlist(trackUri, playlist);
-        
+        else 
+        {
+            console.log("Failed to find audio on Spotify");
+        }
     }
 }
 

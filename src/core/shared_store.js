@@ -1,9 +1,8 @@
 const store = {
     config: {
         debug: false,
-        apiKeys: {
-            spotify: ""
-        }
+        channels: [],
+        videos: []
     }
 };
 

@@ -1,1 +1,6 @@
-debug: false
+debug: true
+# List of YouTube channels to create playlists for
+channels:
+# List of specific youtube urls to add to general YouTube playlist.
+videos:
+  - 'https://www.youtube.com/watch?v=ZbZSe6N_BXs'
