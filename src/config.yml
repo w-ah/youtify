@@ -6,7 +6,7 @@ redirectUri: http://localhost:7080/callback
 # Number of latest videos to extract Spotify tracks from. This number may
 # depend on how frequent given channels upload new content
 # updateSize: 30
-# updateIntervalHours: 6
+updateIntervalHours: 0.033 # ~2 min
 # List of YouTube channels to create playlists for
 channels:
   - adelelondon
