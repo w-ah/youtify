@@ -4,6 +4,7 @@ const ytdl = require('ytdl-core');
 const puppeteer = require('puppeteer');
 
 // includes
+const proc = require('../proc');
 const store = require('../shared_store');
 const { BROWSER_DATA_DIR } = require('../constants');
 
@@ -23,9 +24,25 @@ const download_video = (url, outFile) =>
     });
 }
 
-const download_video_clip = async () => 
+const download_video_clip = async (url) => 
 {
+    const d_urls = await get_download_urls(url);
+    console.log(d_urls);
+}
 
+const get_download_urls = async (url) => 
+{
+    const cmdExpr = `youtube-dl --youtube-skip-dash-manifest -g ${url}`;
+    const out = await proc.run_shell(cmdExpr, { returnOutput: true });
+
+    const urls = out.split('\n');
+    const video = urls[0];
+    const audio = urls[1];
+
+    return {
+        video,
+        audio
+    }
 }
 
 // NOTE: Only gets the first page of videos
@@ -101,5 +118,6 @@ const get_channel_video_urls = async (name) =>
 
 module.exports = {
     get_channel_video_urls,
-    download_video
+    download_video,
+    download_video_clip
 };

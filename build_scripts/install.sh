@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # install libs
-sudo yum install ffmpeg sox python3 -y
+sudo yum install ffmpeg sox python3 youtube-dl -y
 
 # install python packages
 pip install shazamio
