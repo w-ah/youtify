@@ -41,9 +41,10 @@ const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) =>
     ];
     // Loops the clips
     console.log("Processing audio clips...");
-    for(const start of clips)
+    for(let i = 0; i < clips.length; ++i)
     {
-        console.log("Processing audio clip: t =", start);
+        const start = clips[i];
+        console.log(`Processing audio clip ${i + 1} of ${clips.length}: t = ${start}`);
         await add_track_clip_to_spotify_playlist({ channel, url }, { start, duration });
     }
 }
