@@ -51,7 +51,7 @@ const process_queue = async () =>
     while(queue.has_next())
     {
         const task = queue.dequeue();
-        const { channel, exec_at, interval } = task;
+        const { channel, interval } = task;
 
         // TODO: Run tasks in parallel depending on number of CPU cores available
         // add as config option
@@ -74,7 +74,7 @@ const process_queue = async () =>
         }
 
         // Schedule next exec
-        add({ ...task, exec_at: exec_at + interval });
+        add({ ...task, exec_at: Date.now() + interval });
     }
 
     console.log("Finished processing queue");
