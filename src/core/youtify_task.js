@@ -21,7 +21,7 @@ const run = async ({ channel }) =>
 const add_channel_tracks_to_spotify_playlist = async ({ channel }) => 
 {
     console.log("Getting channel video urls...")
-    const urls = await youtube.get_channel_video_urls(channel);
+    const urls = (await youtube.get_channel_video_urls(channel));
 
     console.log(`Got ${urls.length} video urls`);
     

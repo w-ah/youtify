@@ -2,8 +2,9 @@ const store = {
     config: {
         debug: false,
         headless: true,
-        channels: [],
-        videos: []
+        updateSize: 30,
+        updateIntervalHours: 6,
+        channels: []
     }
 };
 

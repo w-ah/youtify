@@ -1,15 +1,12 @@
-debug: false
-headless: true
+# debug: false
+# headless: true
 # Number of latest videos to extract Spotify tracks from. This number may
 # depend on how frequent given channels upload new content
-updateSize: 50
-updateIntervalHours: 6
+# updateSize: 30
+# updateIntervalHours: 6
 # List of YouTube channels to create playlists for
 channels:
   - SiccasGuitars
   # - enesyilmazer
   # - chloechuaviolinist
   # - adelelondon
-# List of specific youtube urls to add to general YouTube playlist.
-# videos:
-#   - 'https://www.youtube.com/watch?v=ZbZSe6N_BXs'

@@ -13,13 +13,13 @@ const run = async () =>
         console.log("Processing task queue...")
         await process_queue();
         console.log("Waiting 1 min...");
-        await pause(1);
+        await pause(0.25);
     }
 }
 
-const add = ({ channel, exec_at }) => 
+const add = ({ channel, exec_at, interval }) => 
 {
-    TASKS.push({ channel, exec_at });
+    TASKS.push({ channel, exec_at, interval });
 }
 
 const move_tasks_to_queue = () => 
@@ -50,9 +50,12 @@ const process_queue = async () =>
     while(queue.has_next())
     {
         const task = queue.dequeue();
-        const { channel } = task;
+        const { channel, exec_at, interval } = task;
 
         await youtify.run({ channel });
+
+        // Schedule next exec
+        add({ ...task, exec_at: exec_at + interval });
     }
 }
 

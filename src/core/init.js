@@ -40,7 +40,8 @@ const init = async () =>
     for(const channel of channels)
     {
         // NOTE: exec_at: 0 ensures the task is queued immediately on startup
-        scheduler.add({ channel, exec_at: 0 });
+        // TODO: interval time
+        scheduler.add({ channel, exec_at: 0, interval: 60 * 1000 });
     }
 
     // Start task scheduler
