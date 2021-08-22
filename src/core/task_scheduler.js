@@ -14,7 +14,7 @@ const run = async () =>
         console.log("Processing task queue...")
         await process_queue();
         console.log("Waiting 1 min...");
-        await pause(0.25);
+        await pause(1);
     }
 }
 

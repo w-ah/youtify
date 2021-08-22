@@ -40,8 +40,8 @@ const init = async () =>
     for(const channel of channels)
     {
         // NOTE: exec_at: 0 ensures the task is queued immediately on startup
-        // TODO: interval time
-        scheduler.add({ channel, exec_at: 0, interval: 60 * 1000 });
+        const updateIntervalMillis = store.config.updateIntervalHours * 60 * 60 * 1000
+        scheduler.add({ channel, exec_at: 0, interval: updateIntervalMillis });
     }
 
     // Start task scheduler
