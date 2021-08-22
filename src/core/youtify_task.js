@@ -2,7 +2,6 @@
 const fs = require('fs');
 
 // includes
-const config = require('./config_service');
 const db = require('./db');
 const store = require('./shared_store');
 const media = require('./media');
@@ -10,46 +9,13 @@ const shazam = require('./shazam');
 const youtube = require('./youtube');
 const spotify = require('./spotify');
 
-const { TMP_DIR, TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP, DATA_DIR } = require('./constants');
+const { TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP } = require('./constants');
 
-const start = async () => 
+const run = async ({ channel }) => 
 {
-    await init();
-
-    const { channels } = store.config;
-
-    console.log("Processing channels...");
-    for(const channel of channels.map(c => c.toLowerCase()))
-    {
-        console.log("Processing channel: ", channel);
-        await add_channel_tracks_to_spotify_playlist({ channel });
-    }
-}
-
-const init = async () => 
-{
-    // Load config
-    config.load();
-
-    if(store.config.debug)
-    {
-        console.log("Using config: \n", JSON.stringify(store.config, null, 4));
-    }
-
-    // Cleanup
-    console.log("Cleaning up old temporary files...");
-    if(fs.existsSync(TMP_DIR))
-    {
-        fs.rmSync(TMP_DIR, { recursive: true });
-    }
-
-    // Init data dirs
-    fs.mkdirSync(TMP_DIR, { recursive: true });
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-
-    // Init db
-    console.log("Initialising DB...");
-    await db.init();
+    const lChannel = channel.toLowerCase();
+    console.log("Processing channel: ", lChannel);
+    await add_channel_tracks_to_spotify_playlist({ channel: lChannel });   
 }
 
 const add_channel_tracks_to_spotify_playlist = async ({ channel }) => 
@@ -198,5 +164,5 @@ const processed_clip_guard = async ({ channel, url }, { start, duration }) =>
 }
 
 module.exports = {
-    start
+    run
 };

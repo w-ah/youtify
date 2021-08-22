@@ -2,13 +2,13 @@
 require('dotenv').config(); // set env vars from .env file
 
 // includes
-const youtify = require('./core/youtify_main');
+const init = require('./core/init');
 
 const main = async () => 
 {
     console.log("Starting...");
 
-    await youtify.start();
+    await init();
 
     console.log("Exiting...");
     process.exit(0);
