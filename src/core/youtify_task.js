@@ -39,7 +39,6 @@ const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) =>
 {
     // Download youtube video
     console.log("Downloading video...");
-    // TODO: Retryable
     // TODO: Is there something better we can do for longer videos? - Just download the part we need for a given clip within the clip method?
     await youtube.download_video(url, TMP_VID);
 

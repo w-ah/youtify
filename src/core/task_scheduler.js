@@ -25,9 +25,8 @@ const add = ({ channel, exec_at, interval }) =>
 const move_tasks_to_queue = () => 
 {
     const now = Date.now();
-    const taskSlice = TASKS.slice();
-
     const readyTasks = [];
+    const unreadyTasks = TASKS.slice();
 
     for(let i = 0; i < TASKS.length; ++i)
     {
@@ -35,12 +34,12 @@ const move_tasks_to_queue = () =>
         if(task.exec_at < now)
         {
             readyTasks.push(task);
-            taskSlice.splice(0, 1);
+            unreadyTasks.splice(i, 1);
         }
     }
 
     TASKS.length = 0;
-    TASKS.push(...taskSlice);
+    TASKS.push(...unreadyTasks);
 
     readyTasks.forEach(t => queue.enqueue(t));
 }
