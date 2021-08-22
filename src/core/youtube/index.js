@@ -23,6 +23,11 @@ const download_video = (url, outFile) =>
     });
 }
 
+const download_video_clip = async () => 
+{
+
+}
+
 // NOTE: Only gets the first page of videos
 // TODO: Paging/ iterate pages
 const get_channel_video_urls = async (name) => 
@@ -59,7 +64,7 @@ const get_channel_video_urls = async (name) =>
                 if(page.url().includes('consent'))
                 {
                     await new Promise(resolve => setTimeout(resolve, 1000));
-                    
+
                     await page.hover('form button');
                     await page.click('form button'); // accept data and cookie policy
                     await page.waitForNavigation();

@@ -39,7 +39,8 @@ const init = async () =>
     const { channels } = store.config;
     for(const channel of channels)
     {
-        scheduler.add({ channel });
+        // NOTE: exec_at: 0 ensures the task is queued immediately on startup
+        scheduler.add({ channel, exec_at: 0 });
     }
 
     // Start task scheduler
