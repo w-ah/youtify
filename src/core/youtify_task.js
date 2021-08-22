@@ -5,7 +5,7 @@ const shazam = require('./shazam');
 const youtube = require('./youtube');
 const spotify = require('./spotify');
 
-const { TMP_VID, TMP_VID_AUDIO, TMP_AUDIO, TMP_AUDIO_CLIP } = require('./constants');
+const { TMP_AUDIO_CLIP } = require('./constants');
 
 const run = async ({ channel }) => 
 {
