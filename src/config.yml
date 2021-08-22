@@ -11,6 +11,6 @@ redirectUri: http://localhost:7080/callback
 channels:
   - adelelondon
   - siccasguitars
-  # - enesyilmazer
+  - enesyilmazer
   # - chloechuaviolinist
   

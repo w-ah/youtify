@@ -34,8 +34,7 @@ const move_tasks_to_queue = () =>
         const task = TASKS[i];
         if(task.exec_at < now)
         {
-            readyTasks.push(task);
-            unreadyTasks.splice(i, 1);
+            readyTasks.push(unreadyTasks.shift())
         }
     }
 
