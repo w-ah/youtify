@@ -68,6 +68,7 @@ const process_queue = async () =>
             // If there is an error, add the task to the queue again to be 
             // re-processed immediately
             // TODO: Max retires? Retry backoff perid?
+            console.log("Task error. Re-queueing");
             queue.enqueue(task);
         }
 

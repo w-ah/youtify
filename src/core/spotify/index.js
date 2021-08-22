@@ -6,13 +6,12 @@ const puppeteer = require('puppeteer');
 // includes
 const { BROWSER_DATA_DIR } = require('../constants'); 
 const store = require('../shared_store');
-const { config } = require('dotenv');
 
 // NOTE: What if the port becomes un-available before starting the http server?
 const credentials = {
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: 'http://localhost:7777/callback' // NOTE: This must be whitelisted in your developer account spotify app settings
+    redirectUri: store.config.redirectUri
 };
 const SPOTIFY_API = new Spotify(credentials);
 
