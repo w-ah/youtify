@@ -35,7 +35,7 @@ const init = async () =>
     await db.init();
 
     // Add tasks to queue
-    console.log("Initialising task queue...");
+    console.log("Initialising task scheduler tasks...");
     const { channels } = store.config;
     for(const channel of channels)
     {

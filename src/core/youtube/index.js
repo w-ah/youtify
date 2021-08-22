@@ -1,33 +1,16 @@
 // 3rd party includes
-const fs = require('fs');
-const ytdl = require('ytdl-core');
 const puppeteer = require('puppeteer');
 
 // includes
 const proc = require('../proc');
 const store = require('../shared_store');
+const media = require('../media');
 const { BROWSER_DATA_DIR } = require('../constants');
 
-const download_video = (url, outFile) => 
+const download_audio_clip = async (url, outFile, { start, duration }) => 
 {
-    return new Promise((resolve, reject) => 
-    {
-        const stream = ytdl(url)
-            .pipe(fs.createWriteStream(outFile));
-
-        stream.on('finish', resolve);
-        stream.on('error', e => 
-        {
-            console.log(e);
-            reject();
-        })
-    });
-}
-
-const download_video_clip = async (url) => 
-{
-    const d_urls = await get_download_urls(url);
-    console.log(d_urls);
+    const { audio } = await get_download_urls(url);
+    await media.download_audio_clip_from_url(audio, outFile, { start, duration });
 }
 
 const get_download_urls = async (url) => 
@@ -118,6 +101,5 @@ const get_channel_video_urls = async (name) =>
 
 module.exports = {
     get_channel_video_urls,
-    download_video,
-    download_video_clip
+    download_audio_clip
 };

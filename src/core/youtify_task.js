@@ -37,14 +37,14 @@ const add_channel_tracks_to_spotify_playlist = async ({ channel }) =>
 
 const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) => 
 {
-    // Download youtube video
-    console.log("Downloading video...");
-    // TODO: Is there something better we can do for longer videos? - Just download the part we need for a given clip within the clip method?
-    await youtube.download_video(url, TMP_VID);
+    // // Download youtube video
+    // console.log("Downloading video...");
+    // // TODO: Is there something better we can do for longer videos? - Just download the part we need for a given clip within the clip method?
+    // await youtube.download_video(url, TMP_VID);
 
-    // Convert video to mp3
-    console.log("Extracting video audio...");
-    await media.mp4_file_to_mp3_file(TMP_VID);
+    // // Convert video to mp3
+    // console.log("Extracting video audio...");
+    // await media.mp4_file_to_mp3_file(TMP_VID);
 
     // Get audio track length
     // Split track into multiple clips
@@ -76,21 +76,41 @@ const add_track_clip_to_spotify_playlist = async ({ channel, url }, { start, dur
 
     // TODO: What is the best length and where should we sample this from a longer clip?
 
-    // Clip
-    console.log("Clipping audio...");
-    try
-    {
-        fs.copyFileSync(TMP_VID_AUDIO, TMP_AUDIO);
-    }
-    catch(e)
-    {
-        if(store.config.debug)
-        {
-            console.log(e);
-        }
-        // skip
-    }
-    await media.clip(TMP_AUDIO, TMP_AUDIO_CLIP, start, duration);
+    // Download youtube video clip
+    console.log("Downloading video audio clip...");
+    await youtube.download_audio_clip(url, TMP_AUDIO_CLIP, { start, duration });
+
+    // // // Convert video to mp3
+    // // console.log("Extracting video audio...");
+    // // await media.mp4_file_to_mp3_file(TMP_VID);
+    // try
+    // {
+    //     fs.copyFileSync(TMP_VID_AUDIO, TMP_AUDIO_CLIP);
+    // }
+    // catch(e)
+    // {
+    //     if(store.config.debug)
+    //     {
+    //         console.log(e);
+    //     }
+    //     // skip
+    // }
+
+    // // Clip
+    // console.log("Clipping audio...");
+    // try
+    // {
+    //     fs.copyFileSync(TMP_VID_AUDIO, TMP_AUDIO);
+    // }
+    // catch(e)
+    // {
+    //     if(store.config.debug)
+    //     {
+    //         console.log(e);
+    //     }
+    //     // skip
+    // }
+    // await media.clip(TMP_AUDIO, TMP_AUDIO_CLIP, start, duration);
 
     // Convert to ogg
     console.log("Converting audio to ogg...");

@@ -7,22 +7,38 @@ const puppeteer = require('puppeteer');
 const { BROWSER_DATA_DIR } = require('../constants'); 
 const store = require('../shared_store');
 
-// NOTE: What if the port becomes un-available before starting the http server?
-const credentials = {
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: store.config.redirectUri
+const LOCAL = {
+    // NOTE: What if the port becomes un-available before starting the http server?
+    credentials: {
+        clientId: process.env.SPOTIFY_CLIENT_ID,
+        clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+        redirectUri: store.config.redirectUri
+    },
+    api: new Spotify(),
+    // The code that's returned as a query parameter to the redirect URI
+    auth_code: '',
+    init: false
 };
-const SPOTIFY_API = new Spotify(credentials);
-
-// The code that's returned as a query parameter to the redirect URI
-let AUTH_CODE = '';
 
 // Create HTTP server to get the access code from re-direct
 const server = http.createServer();
 
+const init_guard = () => 
+{
+    if(LOCAL.init)
+    {
+        return;
+    }
+
+    LOCAL.credentials.redirectUri = store.config.redirectUri;
+    LOCAL.api = new Spotify(LOCAL.credentials);
+    LOCAL.init = true;
+}
+
 const load_auth_code = async () => 
 {
+    init_guard();
+
     // Open browser 
     const browser = await puppeteer.launch({ 
         headless: store.config.headless, 
@@ -33,7 +49,7 @@ const load_auth_code = async () =>
         }  
     }); 
 
-    AUTH_CODE = await new Promise(async (resolve, reject) => 
+    LOCAL.auth_code = await new Promise(async (resolve, reject) => 
     {
         let closed = false;
 
@@ -52,19 +68,21 @@ const load_auth_code = async () =>
             resolve(auth_code);
         };
         server.addListener('request', serverListener);
-        server.listen(7777);
+        server.listen(new URL(store.config.redirectUri).port);
 
         const scopes = ['user-read-private', 'user-read-email', 'playlist-modify-private', 'playlist-modify-public'];
         const state = '';
 
         // Create the authorization URL
-        const authorizeURL = SPOTIFY_API.createAuthorizeURL(scopes, state);
+        const authorizeURL = LOCAL.api.createAuthorizeURL(scopes, state);
 
         try 
         {
             // Open browser page and login using provided user/pass
             const page = await browser.newPage();
             await page.goto(authorizeURL);
+
+            console.log(authorizeURL)
             
             console.log("Entering username...");
             await page.focus('input#login-username');
@@ -126,7 +144,7 @@ const load_auth_code = async () =>
 const refresh_access_token = async () => 
 {
     // Retrieve an access token and a refresh token
-    const data = await SPOTIFY_API.authorizationCodeGrant(AUTH_CODE);
+    const data = await LOCAL.api.authorizationCodeGrant(LOCAL.auth_code);
 
     const { expires_in, access_token, refresh_token } = data.body;
 
@@ -138,10 +156,10 @@ const refresh_access_token = async () =>
     }
 
     // Set the access token on the API object to use it in later calls
-    SPOTIFY_API.setAccessToken(access_token);
-    SPOTIFY_API.setRefreshToken(refresh_token);
+    LOCAL.api.setAccessToken(access_token);
+    LOCAL.api.setRefreshToken(refresh_token);
 
-    await SPOTIFY_API.refreshAccessToken();
+    await LOCAL.api.refreshAccessToken();
 }
 
 const authenticate_user_guard = async () => 
@@ -154,7 +172,7 @@ const search_track = async (query) =>
 {
     await authenticate_user_guard();
 
-    const data = await SPOTIFY_API.searchTracks(query, { limit: 1 });
+    const data = await LOCAL.api.searchTracks(query, { limit: 1 });
 
     return data.body;
 }
@@ -163,7 +181,7 @@ const create_playlist = async (name) =>
 {
     await authenticate_user_guard();
 
-    const data = await SPOTIFY_API.createPlaylist(name);
+    const data = await LOCAL.api.createPlaylist(name);
 
     return data.body;
 }
@@ -173,7 +191,7 @@ const add_to_playlist = async (playlistId, trackUri) =>
     await authenticate_user_guard();
 
     // Check if track already added
-    const data = await SPOTIFY_API.getPlaylistTracks(playlistId);
+    const data = await LOCAL.api.getPlaylistTracks(playlistId);
     const details = data.body;
     const tracks = details.items.map(i => i.track);
     const track = tracks.find(t => t.uri === trackUri);
@@ -184,7 +202,7 @@ const add_to_playlist = async (playlistId, trackUri) =>
         return;
     }
 
-    await SPOTIFY_API.addTracksToPlaylist(playlistId, [ trackUri ]);
+    await LOCAL.api.addTracksToPlaylist(playlistId, [ trackUri ]);
 }
 
 // NOTE: Will take first in list if multiple playlists with same name.
@@ -193,7 +211,7 @@ const get_playlist_by_name = async (name) =>
 {
     await authenticate_user_guard();
 
-    const data = await SPOTIFY_API.getUserPlaylists();
+    const data = await LOCAL.api.getUserPlaylists();
     const playlists = data.body;
 
     const playlist = playlists.items.find(p => p.name === name);
@@ -205,7 +223,7 @@ const get_or_create_playlist_by_name = async (name) =>
 {
     await authenticate_user_guard();
 
-    let data = await SPOTIFY_API.getUserPlaylists();
+    let data = await LOCAL.api.getUserPlaylists();
     const playlists = data.body;
 
     const playlist = playlists.items.find(p => p.name === name);
@@ -216,7 +234,7 @@ const get_or_create_playlist_by_name = async (name) =>
     }
 
     // Create playlist
-    data = await SPOTIFY_API.createPlaylist(name);
+    data = await LOCAL.api.createPlaylist(name);
 
     return data.body;
 }
@@ -225,7 +243,7 @@ const get_or_create_playlist_by_id = async (id, name) =>
 {
     await authenticate_user_guard();
 
-    let data = await SPOTIFY_API.getUserPlaylists();
+    let data = await LOCAL.api.getUserPlaylists();
     const playlists = data.body;
 
     const playlist = playlists.items.find(p => p.id === id);
@@ -236,7 +254,7 @@ const get_or_create_playlist_by_id = async (id, name) =>
     }
 
     // Create playlist
-    data = await SPOTIFY_API.createPlaylist(name);
+    data = await LOCAL.api.createPlaylist(name);
 
     return data.body;
 }
