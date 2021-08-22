@@ -5,6 +5,11 @@ const has_next = () =>
     return QUEUE.length > 0;
 }
 
+const size = () => 
+{
+    return QUEUE.length;
+}
+
 const enqueue = (task) => 
 {
     QUEUE.push(task);
@@ -18,6 +23,7 @@ const dequeue = () =>
 
 module.exports = {
     has_next,
+    size,
     enqueue,
     dequeue
 }

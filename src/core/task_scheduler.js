@@ -42,11 +42,13 @@ const move_tasks_to_queue = () =>
     TASKS.length = 0;
     TASKS.push(...unreadyTasks);
 
-    readyTasks.forEach(t => queue.enqueue(t));
+    readyTasks.forEach(queue.enqueue);
 }
 
 const process_queue = async () =>
 {
+    const q_start_size = queue.size();
+
     while(queue.has_next())
     {
         const task = queue.dequeue();
@@ -56,6 +58,7 @@ const process_queue = async () =>
         // add as config option
         try 
         {
+            console.log(`Running ${q_start_size - queue.size()} of ${q_start_size} queued tasks...`);
             await youtify.run({ channel });
         }
         catch(e)
@@ -65,16 +68,17 @@ const process_queue = async () =>
                 console.log(e);
             }
 
-            // If there is an error, add the task to the queue again to be 
-            // re-processed immediately
+            // If there is an error, re-schedule the task
             // TODO: Max retires? Retry backoff perid?
-            console.log("Task error. Re-queueing");
-            queue.enqueue(task);
+            console.log("Task error. Re-scheduling");
+            add(task);
         }
 
         // Schedule next exec
         add({ ...task, exec_at: exec_at + interval });
     }
+
+    console.log("Finished processing queue");
 }
 
 const pause = async (mins) => 
