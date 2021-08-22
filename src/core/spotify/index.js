@@ -6,6 +6,7 @@ const puppeteer = require('puppeteer');
 // includes
 const { BROWSER_DATA_DIR } = require('../constants'); 
 const store = require('../shared_store');
+const { config } = require('dotenv');
 
 // NOTE: What if the port becomes un-available before starting the http server?
 const credentials = {
@@ -24,7 +25,14 @@ const server = http.createServer();
 const load_auth_code = async () => 
 {
     // Open browser 
-    const browser = await puppeteer.launch({ headless: store.config.headless, userDataDir: BROWSER_DATA_DIR }); 
+    const browser = await puppeteer.launch({ 
+        headless: store.config.headless, 
+        userDataDir: BROWSER_DATA_DIR, 
+        defaultViewport: { 
+            width: 1920, 
+            height: 1080 
+        }  
+    }); 
 
     AUTH_CODE = await new Promise(async (resolve, reject) => 
     {
@@ -51,7 +59,7 @@ const load_auth_code = async () =>
         const state = '';
 
         // Create the authorization URL
-        var authorizeURL = SPOTIFY_API.createAuthorizeURL(scopes, state);
+        const authorizeURL = SPOTIFY_API.createAuthorizeURL(scopes, state);
 
         try 
         {
@@ -63,11 +71,16 @@ const load_auth_code = async () =>
             await page.focus('input#login-username');
             await page.keyboard.type(process.env.SPOTIFY_USER);
 
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
             console.log("Entering password...");
             await page.focus('input#login-password');
             await page.keyboard.type(process.env.SPOTIFY_PASS);
 
-            console.log("Logging in...")
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            console.log("Logging in...");
+            await page.hover('button#login-button');
             await page.click('button#login-button');
             await page.waitForNavigation();
 

@@ -58,6 +58,9 @@ const get_channel_video_urls = async (name) =>
             {
                 if(page.url().includes('consent'))
                 {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    await page.hover('form button');
                     await page.click('form button'); // accept data and cookie policy
                     await page.waitForNavigation();
                 }
