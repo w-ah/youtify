@@ -202,7 +202,8 @@ const add_to_playlist = async (playlistId, trackUri) =>
         return;
     }
 
-    await LOCAL.api.addTracksToPlaylist(playlistId, [ trackUri ]);
+    // TODO: Add to start vs. end of playlist using { position: 0 } option
+    await LOCAL.api.addTracksToPlaylist(playlistId, [ trackUri ], );
 }
 
 // NOTE: Will take first in list if multiple playlists with same name.
@@ -258,8 +259,6 @@ const get_or_create_playlist_by_id = async (id, name) =>
 
     return data.body;
 }
-
-// TODO: Cache
 
 module.exports = {
     search_track,

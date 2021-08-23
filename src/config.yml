@@ -2,15 +2,13 @@ debug: false
 # Whitelisted URI in your developer account spotify app settings that
 # Spotify will use to redirect to after user authentication.
 redirectUri: http://localhost:7080/callback
-# headless: true
+# headless: false
 # Number of latest videos to extract Spotify tracks from. This number may
 # depend on how frequent given channels upload new content
-# updateSize: 30
+# updateSize: 50
 updateIntervalHours: 0.033 # ~2 min
 # List of YouTube channels to create playlists for
 channels:
-  - adelelondon
-  - siccasguitars
-  - enesyilmazer
-  # - chloechuaviolinist
+  # - enesyilmazer
+  - bbcstrictly
   

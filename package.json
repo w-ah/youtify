@@ -20,10 +20,10 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "js-yaml": "^4.1.0",
-    "lazer-js": "^1.4.5",
     "puppeteer": "^10.2.0",
     "spotify-web-api-node": "^5.0.2",
     "sqlite": "^4.0.23",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.2",
+    "wordpos": "^2.1.0"
   }
 }

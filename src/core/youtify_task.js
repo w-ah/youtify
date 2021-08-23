@@ -4,6 +4,7 @@ const media = require('./media');
 const shazam = require('./shazam');
 const youtube = require('./youtube');
 const spotify = require('./spotify');
+const lyric_rank = require('./lyric_rank');
 
 const { TMP_AUDIO_CLIP } = require('./constants');
 
@@ -16,8 +17,8 @@ const run = async ({ channel }) =>
 
 const add_channel_tracks_to_spotify_playlist = async ({ channel }) => 
 {
-    console.log("Getting channel video urls...")
-    const urls = (await youtube.get_channel_video_urls(channel));
+    console.log("Getting channel video urls...");
+    const urls = await youtube.get_channel_video_urls(channel);
 
     console.log(`Got ${urls.length} video urls`);
     
@@ -33,9 +34,19 @@ const add_channel_tracks_to_spotify_playlist = async ({ channel }) =>
 
 const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) => 
 {
+    // TODO: Check if video contains music. Attempt to get lyrics using GCP.
+    // Search Spotify with generated lyrics for matching songs - rank the matches 
+    // to find the best match based on multiple search queries.
+
+    // TODO: Combine subtitles with video title and description.
+
+    const subsStr = await youtube.get_music_subtitles_str(url);
+    const fingerprint_lyric = await lyric_rank.get_fingerprint_lyric_from_str(subsStr);
+    console.log(fingerprint_lyric);
+
     // Get audio track length
     // Split track into multiple clips
-    const duration = 5;
+    const duration = 6;
     const clips = [
         10, 20, 30, 40, 50 , 60
     ];
@@ -83,6 +94,9 @@ const add_track_clip_to_spotify_playlist = async ({ channel, url }, { start, dur
     }
     else 
     {
+        // TODO: Handle fasle positive results - compare with the original clip
+        // and measure the difference (maybe hamming distance or something)?
+
         console.log("Audio recognized:");
 
         // Pick search properties
