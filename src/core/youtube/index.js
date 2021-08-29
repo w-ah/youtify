@@ -112,11 +112,10 @@ const get_channel_video_urls = async (name) =>
                 }
 
                 // Wait for thumbnails to load
-                await wait_s(1);
+                await wait_s(3);
                 
                 // get list container
-                const listContainer = await page.$('div#primary');
-                const thumbnails = await listContainer.$$('#thumbnail');
+                const thumbnails = await page.$$('div#primary a#thumbnail');
 
                 for(const thumbnail of thumbnails)
                 {
