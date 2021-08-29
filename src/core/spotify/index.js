@@ -6,6 +6,7 @@ const puppeteer = require('puppeteer');
 // includes
 const { BROWSER_DATA_DIR } = require('../constants'); 
 const store = require('../shared_store');
+const { wait_s } = require('../utils/wait');
 
 const LOCAL = {
     // NOTE: What if the port becomes un-available before starting the http server?
@@ -88,13 +89,13 @@ const load_auth_code = async () =>
             await page.focus('input#login-username');
             await page.keyboard.type(process.env.SPOTIFY_USER);
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await wait_s(1);
 
             console.log("Entering password...");
             await page.focus('input#login-password');
             await page.keyboard.type(process.env.SPOTIFY_PASS);
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await wait_s(1);
 
             console.log("Logging in...");
             await page.hover('button#login-button');

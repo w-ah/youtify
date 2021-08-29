@@ -9,6 +9,6 @@ redirectUri: http://localhost:7080/callback
 updateIntervalHours: 0.033 # ~2 min
 # List of YouTube channels to create playlists for
 channels:
-  # - enesyilmazer
+  - enesyilmazer
   - bbcstrictly
   

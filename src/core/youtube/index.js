@@ -7,6 +7,7 @@ const proc = require('../proc');
 const store = require('../shared_store');
 const media = require('../media');
 const { BROWSER_DATA_DIR, TMP_SUBTITLES } = require('../constants');
+const { wait_s } = require('../utils/wait');
 
 const download_audio_clip = async (url, outFile, { start, duration }) => 
 {
@@ -100,14 +101,18 @@ const get_channel_video_urls = async (name) =>
 
             if(res.ok())
             {
+                // accept data and cookie policy
                 if(page.url().includes('consent'))
                 {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    await wait_s(1);
 
                     await page.hover('form button');
-                    await page.click('form button'); // accept data and cookie policy
+                    await page.click('form button'); 
                     await page.waitForNavigation();
                 }
+
+                // Wait for thumbnails to load
+                await wait_s(1);
                 
                 // get list container
                 const listContainer = await page.$('div#primary');

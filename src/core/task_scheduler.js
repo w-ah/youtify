@@ -2,6 +2,7 @@
 const store = require('./shared_store');
 const queue = require('./task_queue');
 const youtify = require('./youtify_task');
+const { wait_min } = require('./utils/wait');
 
 const TASKS = [];
 
@@ -14,7 +15,7 @@ const run = async () =>
         console.log("Processing task queue...")
         await process_queue();
         console.log("Waiting 1 min...");
-        await pause(1);
+        await wait_min(1);
     }
 }
 
@@ -68,7 +69,7 @@ const process_queue = async () =>
             }
 
             // If there is an error, re-schedule the task
-            // TODO: Max retires? Retry backoff perid?
+            // TODO: Max retires? Retry backoff period?
             console.log("Task error. Re-scheduling");
             add(task);
         }
@@ -78,11 +79,6 @@ const process_queue = async () =>
     }
 
     console.log("Finished processing queue");
-}
-
-const pause = async (mins) => 
-{
-    return new Promise(resolve => setTimeout(resolve, mins * 60 * 1000));
 }
 
 module.exports = {
