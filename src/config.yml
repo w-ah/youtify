@@ -1,6 +1,7 @@
-# debug: true
+debug: true
 # headless: false
-execMode: sync # sync/async
+# execMode: sync # sync/async
+workers: 4 # Math.min(os.cpus().length, config.workers)
 
 # Whitelisted URI in your developer account spotify app settings that
 # Spotify will use to redirect to after user authentication.
@@ -13,5 +14,5 @@ updateIntervalHours: 0.033 # ~2 min
 channels:
   - enesyilmazer
   - enesplus
-  # - bbcstrictly
+  - bbcstrictly
   

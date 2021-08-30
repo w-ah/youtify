@@ -1,7 +1,7 @@
 // 3rd party includes
 const path = require('path');
 
-const DATA_VERSION = 0;
+const DATA_VERSION = 1;
 
 const TMP_DIR = path.resolve(__dirname, '../tmp');
 // TODO: Be able to specify this dynamically

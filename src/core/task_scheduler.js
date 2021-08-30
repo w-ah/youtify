@@ -1,16 +1,12 @@
 // 3rd party includes
 const { Worker } = require('worker_threads');
 const path = require('path');
-const os = require('os');
 
 // includes
 const store = require('./store');
 const queue = require('./task_queue');
 const youtify = require('./youtify_task');
 const { wait_min, wait_s, wait_ms } = require('./utils/wait');
-
-// Locals
-const NUM_CPUS = os.cpus().length;
 
 const TASKS = [];
 
@@ -122,7 +118,7 @@ const process_queue_async = async () =>
         {
             const q_idx = q_start_size - queue.size();
 
-            const available_workload = NUM_CPUS - running_worker_count;
+            const available_workload = store.config.workers - running_worker_count;
             if(available_workload > 0)
             {
                 const task = queue.dequeue();
