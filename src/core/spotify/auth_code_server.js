@@ -24,6 +24,11 @@ const addRequestListener = async (listener) =>
         const { port, hostname } = spotm.get_redirect_url();
         await new Promise(resolve => 
         {
+           
+            SERVER.once('error', (e) => 
+            {
+                // TODO: Handle any errors so the worker doesn't die.
+            })
             SERVER.listen(Number(port), hostname, resolve);
         });
     }
