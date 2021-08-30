@@ -7,7 +7,7 @@ const os = require('os');
 const store = require('./shared_store');
 const queue = require('./task_queue');
 const youtify = require('./youtify_task');
-const { wait_min, wait_s } = require('./utils/wait');
+const { wait_min, wait_s, wait_ms } = require('./utils/wait');
 
 // Locals
 const NUM_CPUS = os.cpus().length;
@@ -111,15 +111,13 @@ const process_queue_async = async () =>
 
     // Start executing tasks at front of queue up to the number of available
     // cpu cores.
-    // When a promise resolves, exec a new promise from teh front of the queue.
+    // When a worker finishes and workload becomes available, create a new worker from the front of the queue.
     // Repeat until queue is empty
 
     let running_worker_count = 0;
 
     do
     {
-        await wait_s(1);
-
         if(queue.has_next())
         {
             const q_idx = q_start_size - queue.size();
@@ -168,7 +166,8 @@ const process_queue_async = async () =>
             }
         }
 
-        await wait_s(1);
+        // Don't block - involve the event loop
+        await wait_ms(0);
     }
     while(running_worker_count > 0)
 
