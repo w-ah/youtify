@@ -27,6 +27,10 @@ const addRequestListener = async (listener) =>
            
             SERVER.once('error', (e) => 
             {
+                if(store.config.debug)
+                {
+                    console.log("Spotify auth server error:", e);
+                }
                 // TODO: Handle any errors so the worker doesn't die.
             })
             SERVER.listen(Number(port), hostname, resolve);
