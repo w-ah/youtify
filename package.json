@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build_scripts/build.js",
-    "start": "node src"
+    "start": "node src",
+    "build:docker": "sh build_scripts/docker.sh",
+    "start:docker": "podman"
   },
   "repository": {
     "type": "git",
