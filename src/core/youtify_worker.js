@@ -2,7 +2,11 @@
 const { parentPort, workerData } = require("worker_threads");
 
 // includes
+const config = require('./config_loader');
 const task = require('./youtify_task');
+
+// Load config
+config.load();
 
 (async () => 
 {

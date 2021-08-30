@@ -2,7 +2,7 @@
 const cp = require('child_process');
 
 // includes
-const store = require('./shared_store');
+const store = require('./store');
 
 const run = async (cmdExpr, options) => 
 {

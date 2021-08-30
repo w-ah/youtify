@@ -50,7 +50,7 @@ const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) =>
     // methods, and then work out a way to switch between them dynamically.
     // Use youtube video subtitles to work out where the music is?
     const clips = [
-        10, 20, 30, 40, 50 , 60
+        10, 20, 30, 40, 50, 60, 120
     ];
     // Loops the clips
     console.log("Processing audio clips...");
@@ -77,17 +77,19 @@ const add_track_clip_to_spotify_playlist = async ({ channel, url }, { start, dur
 
     // TODO: What is the best length and where should we sample this from a longer clip?
 
+    const audioClipPath = TMP_AUDIO_CLIP.replace('.mp3', `${Date.now()}.mp3`);
+
     // Download youtube video clip
     console.log("Downloading video audio clip...");
-    await youtube.download_audio_clip(url, TMP_AUDIO_CLIP, { start, duration });
+    await youtube.download_audio_clip(url, audioClipPath, { start, duration });
 
     // Convert to ogg
     console.log("Converting audio to ogg...");
-    await media.mp3_file_to_ogg_file(TMP_AUDIO_CLIP);
+    await media.mp3_file_to_ogg_file(audioClipPath);
 
     // Send to shazam to get back matching song details
     console.log("Getting audio details via Shazam...");
-    const shazamDetails = await shazam.recognize_song(TMP_AUDIO_CLIP);
+    const shazamDetails = await shazam.recognize_song(audioClipPath);
 
     // Handle no matches
     if(shazamDetails.matches.length === 0)

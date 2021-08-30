@@ -4,7 +4,7 @@ const path = require('path');
 const os = require('os');
 
 // includes
-const store = require('./shared_store');
+const store = require('./store');
 const queue = require('./task_queue');
 const youtify = require('./youtify_task');
 const { wait_min, wait_s, wait_ms } = require('./utils/wait');

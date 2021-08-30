@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 
 // includes
 const proc = require('../proc');
-const store = require('../shared_store');
+const store = require('../store');
 const media = require('../media');
 const { BROWSER_DATA_DIR, TMP_SUBTITLES } = require('../constants');
 const { wait_s } = require('../utils/wait');

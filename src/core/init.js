@@ -2,8 +2,8 @@
 const fs = require('fs');
 
 // includes
-const config = require('./config_service');
-const store = require('./shared_store');
+const config = require('./config_loader');
+const store = require('./store');
 const db = require('./db');
 const scheduler = require('./task_scheduler');
 

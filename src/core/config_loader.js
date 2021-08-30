@@ -4,7 +4,7 @@ const fs = require('fs');
 const yml = require('js-yaml');
 
 // includes
-const store = require('./shared_store');
+const store = require('./store');
 
 const CONFIG_PATH = path.resolve(__dirname, '../config.yml')
 
