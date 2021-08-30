@@ -1,8 +1,16 @@
+// 3rd party includes
+const { Worker } = require('worker_threads');
+const path = require('path');
+const os = require('os');
+
 // includes
 const store = require('./shared_store');
 const queue = require('./task_queue');
 const youtify = require('./youtify_task');
-const { wait_min } = require('./utils/wait');
+const { wait_min, wait_s } = require('./utils/wait');
+
+// Locals
+const NUM_CPUS = os.cpus().length;
 
 const TASKS = [];
 
@@ -47,6 +55,22 @@ const move_tasks_to_queue = () =>
 
 const process_queue = async () =>
 {
+    switch(store.config.execMode)
+    {
+        case "sync": 
+        {
+            await process_queue_sync();
+            break;
+        }
+        default: 
+        {
+            await process_queue_async();
+        }
+    }
+}
+
+const process_queue_sync = async () => 
+{
     const q_start_size = queue.size();
 
     while(queue.has_next())
@@ -59,7 +83,10 @@ const process_queue = async () =>
         try 
         {
             console.log(`Running ${q_start_size - queue.size()} of ${q_start_size} queued tasks...`);
-            await youtify.run({ channel });
+            await youtify.run({ channel });   
+
+            // Schedule next exec
+            add({ ...task, exec_at: Date.now() + interval });
         }
         catch(e)
         {
@@ -73,10 +100,77 @@ const process_queue = async () =>
             console.log("Task error. Re-scheduling");
             add(task);
         }
-
-        // Schedule next exec
-        add({ ...task, exec_at: Date.now() + interval });
     }
+
+    console.log("Finished processing queue");
+}
+
+const process_queue_async = async () => 
+{
+    const q_start_size = queue.size();
+
+    // Start executing tasks at front of queue up to the number of available
+    // cpu cores.
+    // When a promise resolves, exec a new promise from teh front of the queue.
+    // Repeat until queue is empty
+
+    let running_worker_count = 0;
+
+    do
+    {
+        await wait_s(1);
+
+        if(queue.has_next())
+        {
+            const q_idx = q_start_size - queue.size();
+
+            const available_workload = NUM_CPUS - running_worker_count;
+            if(available_workload > 0)
+            {
+                const task = queue.dequeue();
+                const { channel, interval } = task;
+
+                console.log(`Running ${q_idx + 1} of ${q_start_size} queued tasks...`);
+
+                new Promise(resolve => 
+                {
+                    const worker_path = path.resolve(__dirname, 'youtify_worker.js');
+                    const worker = new Worker(worker_path, { workerData: { channel } });
+
+                    worker.once("message", res => 
+                    {   
+                        const { err, status } = res;
+
+                        if(status === "OK")
+                        {
+                            // Schedule next exec
+                            add({ ...task, exec_at: Date.now() + interval });
+                        }
+                        else 
+                        {
+                            if(store.config.debug)
+                            {
+                                console.log(err);
+                            }
+
+                            // If there is an error, re-schedule the task
+                            // TODO: Max retires? Retry backoff period?
+                            console.log("Task error. Re-scheduling");
+                            add(task);
+                        }
+
+                        --running_worker_count;
+                        resolve();
+                    });
+                });
+
+                ++running_worker_count;
+            }
+        }
+
+        await wait_s(1);
+    }
+    while(running_worker_count > 0)
 
     console.log("Finished processing queue");
 }

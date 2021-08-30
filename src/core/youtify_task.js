@@ -10,7 +10,7 @@ const { TMP_AUDIO_CLIP } = require('./constants');
 const run = async ({ channel }) => 
 {
     const lChannel = channel.toLowerCase();
-    console.log("Processing channel: ", lChannel);
+    console.log(`Processing channel: ${lChannel}`);
     await add_channel_tracks_to_spotify_playlist({ channel: lChannel });   
 }
 
@@ -48,6 +48,7 @@ const add_url_track_clips_to_spotify_playlist = async ({ channel, url }) =>
     const duration = 9;
     // TODO: Dynamic sampling? - Start with a selection of different sampling
     // methods, and then work out a way to switch between them dynamically.
+    // Use youtube video subtitles to work out where the music is?
     const clips = [
         10, 20, 30, 40, 50 , 60
     ];

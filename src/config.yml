@@ -1,8 +1,10 @@
-debug: false
+debug: true
+# headless: false
+# execMode: sync # sync/async
+
 # Whitelisted URI in your developer account spotify app settings that
 # Spotify will use to redirect to after user authentication.
 redirectUri: http://localhost:7080/callback
-# headless: false
 # Number of latest videos to extract Spotify tracks from. This number may
 # depend on how frequent given channels upload new content
 # updateSize: 50

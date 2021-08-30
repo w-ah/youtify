@@ -1,8 +1,9 @@
 const store = {
     config: {
         debug: false,
-        redirectUri: "http://localhost:8080/callback",
         headless: true,
+        execMode: "async",
+        redirectUri: "http://localhost:8080/callback",
         updateSize: 30,
         updateIntervalHours: 6,
         channels: []
