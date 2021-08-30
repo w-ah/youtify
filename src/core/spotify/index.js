@@ -22,7 +22,6 @@ const load_auth_code = async () =>
         }  
     }); 
 
-
     const auth_code = await new Promise(async (resolve, reject) => 
     {
         let closed = false;
@@ -92,10 +91,7 @@ const load_auth_code = async () =>
         }
         catch(e)
         {
-            if(store.config.debug)
-            {
-                console.log(e);
-            }
+            // Skip
         }
     });
 

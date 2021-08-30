@@ -1,3 +1,6 @@
+// 3rd party includes
+const fs = require('fs');
+
 // includes
 const db = require('./db');
 const media = require('./media');
@@ -137,6 +140,19 @@ const add_track_clip_to_spotify_playlist = async ({ channel, url }, { start, dur
         start, 
         duration 
     });
+
+    // Clean up
+    const mp3File = audioClipPath;
+    const oggFile = audioClipPath.replace('.mp3', '.ogg');
+
+    if(fs.existsSync(mp3File))
+    {
+        fs.rmSync(mp3File, { recursive: true });
+    }
+    if(fs.existsSync(oggFile))
+    {
+        fs.rmSync(oggFile, { recursive: true });
+    }
 }
 
 const processed_clip_guard = async ({ channel, url }, { start, duration }) => 
