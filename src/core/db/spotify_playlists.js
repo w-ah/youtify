@@ -11,12 +11,12 @@ const create = async () =>
 {
     const db = await dbm.get_handle();
 
-    await db.exec(`
+    await db.prepare(`
         CREATE TABLE IF NOT EXISTS ${TABLE_NAME} ( 
             id TEXT,
             name TEXT
         )
-    `);
+    `).run();
 }
 
 const add_playlist = async ({ id, name }) => 
@@ -29,20 +29,20 @@ const add_playlist = async ({ id, name }) =>
 
     const db = await dbm.get_handle();
 
-    await db.run(`
+    await db.prepare(`
         INSERT INTO ${TABLE_NAME} ( id, name )
         VALUES ('${id}', '${name}')
-    `);
+    `).run();
 }
 
 const get_playlist_by_name = async ({ name }) => 
 {
     const db = await dbm.get_handle();
 
-    const playlist = await db.get(`
+    const playlist = await db.prepare(`
         SELECT * FROM ${TABLE_NAME} 
         WHERE name='${name}'
-    `);
+    `).get();
 
     return playlist;
 }
