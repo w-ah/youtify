@@ -1,5 +1,5 @@
 // 3rd party includes
-const https = require('https');
+const http = require('http');
 const store = require('../store');
 
 // includes
@@ -8,7 +8,7 @@ const spotm = require('./manager');
 // Create HTTP server to get the access code from re-direct
 // NOTE: We create a single server instance in the main thread,
 // which is re-used by all worker threads.
-const SERVER = https.createServer();
+const SERVER = http.createServer();
 
 const LISTENER_MAP = new Map();
 
@@ -83,10 +83,10 @@ const addCallbackHandler = async (id, handler) =>
 
         const auth_code = url.searchParams.get('code');
 
-        handler(auth_code);
-
-        // Automatically remove handler after first exec.
+        // Automatically remove handler on first exec.
         removeCallbackHandler(handler);
+
+        handler(auth_code);
     }
 
     // Associate the handler and listner

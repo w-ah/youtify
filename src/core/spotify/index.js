@@ -79,9 +79,10 @@ const load_auth_code = async () =>
             // if there is a verify/accept/aggree permissions button
             try 
             {  
-                console.log("Accepting permissions...");
                 if(await page.$('button#auth-accept'))
                 {
+                    console.log("Accepting permissions...");
+
                     await page.click('button#auth-accept');
                     await page.waitForNavigation();
                     console.log("Finished auth");
