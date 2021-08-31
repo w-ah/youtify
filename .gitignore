@@ -1,5 +1,6 @@
 node_modules
 .vscode
+.dccache
 music.mp3
 .env
 src/data
