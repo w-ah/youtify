@@ -17,6 +17,6 @@ FROM packages AS app
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 7080
 
 CMD [ "node", "src" ]
