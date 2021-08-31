@@ -20,7 +20,9 @@ const load_auth_code = async () =>
             width: 1920, 
             height: 1080 
         },
-        executablePath: process.env['YOUTIY_CHROME_PATH'] || null
+        args: [
+            '--no-sandbox'
+        ]
     }); 
 
     const auth_code = await new Promise(async (resolve, reject) => 

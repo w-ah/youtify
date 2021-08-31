@@ -78,7 +78,10 @@ const get_channel_video_urls = async (name) =>
         defaultViewport: { 
             width: 1920, 
             height: 2160 
-        } 
+        },
+        args: [
+            '--no-sandbox'
+        ]
     }); 
     const page = await browser.newPage();
 
