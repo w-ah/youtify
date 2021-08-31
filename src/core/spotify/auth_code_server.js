@@ -1,5 +1,5 @@
 // 3rd party includes
-const http = require('http');
+const https = require('https');
 const store = require('../store');
 
 // includes
@@ -8,7 +8,7 @@ const spotm = require('./manager');
 // Create HTTP server to get the access code from re-direct
 // NOTE: We create a single server instance in the main thread,
 // which is re-used by all worker threads.
-const SERVER = http.createServer();
+const SERVER = https.createServer();
 
 const LISTENER_MAP = new Map();
 
