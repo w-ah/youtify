@@ -6,7 +6,8 @@ const config = require('./config_loader');
 const task = require('./youtify_task');
 
 // Load config
-// NOTE: Need to do this again since we don't
+// NOTE: Need to do this again since we don't have access to the same
+// instances of loaded modules as the main thread
 config.load();
 
 (async () => 
