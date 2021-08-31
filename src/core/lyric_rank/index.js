@@ -20,7 +20,11 @@ const get_fingerprint_lyric = async (lines) =>
         {
             return -1;
         }
-        return 1;
+        else if(a.rank < b.rank)
+        {
+            return 1;
+        }
+        return 0;
     });
 
     return sorted[0];
