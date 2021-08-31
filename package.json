@@ -8,7 +8,7 @@
     "build": "node build_scripts/build.js",
     "start": "node src",
     "build:docker": "sh build_scripts/docker.sh",
-    "start:docker": "podman"
+    "start:docker": "podman run youtify"
   },
   "repository": {
     "type": "git",
