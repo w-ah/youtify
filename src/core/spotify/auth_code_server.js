@@ -1,5 +1,9 @@
 // 3rd party includes
-const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+
+// includes
 const store = require('../store');
 
 // includes
@@ -8,7 +12,13 @@ const spotm = require('./manager');
 // Create HTTP server to get the access code from re-direct
 // NOTE: We create a single server instance in the main thread,
 // which is re-used by all worker threads.
-const SERVER = http.createServer();
+
+// NOTE: SSL as per https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/
+const SERVER = https.createServer({
+    key: fs.readFileSync(path.resolve(__dirname, '../../key.pem')),
+    cert: fs.readFileSync(path.resolve(__dirname, '../../cert.pem')),
+    rejectUnauthorized: false
+});
 
 const LISTENER_MAP = new Map();
 

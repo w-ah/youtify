@@ -22,7 +22,8 @@ const load_auth_code = async () =>
         },
         args: [
             '--no-sandbox'
-        ]
+        ],
+        ignoreHTTPSErrors: true
     }); 
 
     const auth_code = await new Promise(async (resolve, reject) => 
@@ -53,7 +54,7 @@ const load_auth_code = async () =>
         {
             // Open browser page and login using provided user/pass
             const page = await browser.newPage();
-            await page.goto(authorizeURL);
+            await page.goto(authorizeURL, {  });
             
             await page.focus('input#login-username');
             await page.keyboard.type(process.env.SPOTIFY_USER);
