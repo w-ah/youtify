@@ -25,14 +25,7 @@ const addRequestListener = async (listener) =>
         await new Promise(resolve => 
         {
            
-            SERVER.once('error', (e) => 
-            {
-                if(store.config.debug)
-                {
-                    console.log("Spotify auth server error:", e);
-                }
-                // TODO: Handle any errors so the worker doesn't die.
-            })
+            SERVER.once('error', requestListenerErrorHandler);
             SERVER.listen(Number(port), hostname, resolve);
         });
     }
@@ -48,11 +41,21 @@ const addRequestListener = async (listener) =>
     }
 }
 
+const requestListenerErrorHandler = (e) => 
+{
+    if(store.config.debug)
+    {
+        console.log("Spotify auth server error:", e);
+    }
+    // TODO: Handle any errors so the worker doesn't die.
+}
+
 const removeRequestListener = (listener) => 
 {
     --listenerCount;
 
     SERVER.removeListener('request', listener);
+    SERVER.removeListener('error', requestListenerErrorHandler);
 
     // check if there are other listeners still using the 
     // server, else close the server and stop accepting new connections.
