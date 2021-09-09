@@ -1,16 +1,7 @@
-const os = require('os');
+const default_config = require('./default_config');
 
 const store = {
-    config: {
-        debug: false,
-        headless: true,
-        execMode: "async",
-        workers: os.cpus().length,
-        redirectUri: "http://localhost:8080/callback",
-        updateSize: 30,
-        updateIntervalHours: 6,
-        channels: []
-    }
+    config: default_config
 };
 
 module.exports = store;
