@@ -9,7 +9,7 @@
     "start": "node src",
     "start:trace": "node --trace-warnings src",
     "build:docker": "sh build_scripts/docker.sh",
-    "start:docker": "podman run youtify"
+    "start:docker": "podman run --security-opt seccomp=chrome.json youtify"
   },
   "repository": {
     "type": "git",
