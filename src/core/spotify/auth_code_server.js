@@ -36,7 +36,7 @@ const addRequestListener = async (listener) =>
         {
            
             SERVER.once('error', requestListenerErrorHandler);
-            SERVER.listen(Number(port), hostname, resolve);
+            SERVER.listen(Number(port), resolve);
         });
     }
 
