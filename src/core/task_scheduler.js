@@ -6,7 +6,7 @@ const path = require('path');
 const store = require('./store');
 const queue = require('./task_queue');
 const youtify = require('./youtify_task');
-const { wait_min, wait_s, wait_ms } = require('./utils/wait');
+const { wait_min, wait_ms } = require('./utils/wait');
 
 const TASKS = [];
 

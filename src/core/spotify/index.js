@@ -7,7 +7,6 @@ const auth_code_server = require('./auth_code_server');
 const { BROWSER_DATA_DIR } = require('../constants'); 
 const store = require('../store');
 const { wait_s } = require('../utils/wait');
-const { resolveCaa } = require('dns');
 
 const load_auth_code = async () => 
 {
@@ -29,7 +28,7 @@ const load_auth_code = async () =>
         ignoreHTTPSErrors: true 
     }); 
 
-    const auth_code = await new Promise(async (resolve, reject) => 
+    const auth_code = await new Promise(async (resolve) => 
     {
         let closed = false;
 

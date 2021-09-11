@@ -31,10 +31,11 @@ const addRequestListener = async (listener) =>
     // check server has already started, else start listening for new connections.
     if(listenerCount === 0)
     {
-        const { port, hostname } = spotm.get_redirect_url();
+        const { port } = spotm.get_redirect_url();
+        
         await new Promise(resolve => 
         {
-           
+            SERVER.removeAllListeners('error');
             SERVER.once('error', requestListenerErrorHandler);
             SERVER.listen(Number(port), resolve);
         });
@@ -65,7 +66,7 @@ const removeRequestListener = (listener) =>
     --listenerCount;
 
     SERVER.removeListener('request', listener);
-    SERVER.removeListener('error', requestListenerErrorHandler);
+    // SERVER.removeListener('error', requestListenerErrorHandler);
 
     // check if there are other listeners still using the 
     // server, else close the server and stop accepting new connections.
