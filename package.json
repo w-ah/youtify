@@ -9,7 +9,8 @@
     "start": "node src",
     "start:trace": "node --trace-warnings src",
     "build:docker": "sh build_scripts/docker.sh",
-    "start:docker": "podman run --security-opt seccomp=chrome.json youtify"
+    "start:docker": "podman run --security-opt seccomp=chrome.json youtify",
+    "lint": "npx eslint src"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^16.6.1"
+    "@types/node": "^16.6.1",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
     "better-sqlite3": "^7.4.3",
