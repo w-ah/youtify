@@ -1,6 +1,5 @@
 node_modules
 npm-debug.log
 .vscode
-build_scripts
 src/data
 src/tmp

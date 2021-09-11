@@ -1,10 +1,10 @@
 #! /bin/bash
 
 # install libs
-sudo yum install ffmpeg sox python3 youtube-dl -y
+sudo yum install ffmpeg sox python3 python-pip3 youtube-dl -y
 
 # install python packages
-pip install shazamio
+pip3 install shazamio
 
 # install node packages
 sudo ln -s "$(which node)" /usr/bin/node

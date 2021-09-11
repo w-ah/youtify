@@ -13,7 +13,7 @@ const recognize_song = async (file) =>
 {
     prepare_python_script(file);
 
-    const cmdExp = `python ${PY_SCRIPT}`;
+    const cmdExp = `python3 ${PY_SCRIPT}`;
 
     const out = await proc.run_shell(cmdExp, { returnOutput: true });
 

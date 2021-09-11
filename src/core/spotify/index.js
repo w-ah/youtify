@@ -7,6 +7,7 @@ const auth_code_server = require('./auth_code_server');
 const { BROWSER_DATA_DIR } = require('../constants'); 
 const store = require('../store');
 const { wait_s } = require('../utils/wait');
+const { resolveCaa } = require('dns');
 
 const load_auth_code = async () => 
 {
@@ -23,7 +24,9 @@ const load_auth_code = async () =>
         args: [
             '--no-sandbox'
         ],
-        ignoreHTTPSErrors: true
+        // NOTE: we are using a HTTPS server for the auth callback with self-signed 
+        // cert so need to make sure we don't hang on SSL warnings
+        ignoreHTTPSErrors: true 
     }); 
 
     const auth_code = await new Promise(async (resolve, reject) => 
@@ -46,15 +49,14 @@ const load_auth_code = async () =>
 
         if(store.config.debug)
         {
-            console.log("Spotify authorize url:", authorizeURL)
-
+            console.log("Spotify authorize url:", authorizeURL);
         }
 
         try 
         {
             // Open browser page and login using provided user/pass
             const page = await browser.newPage();
-            await page.goto(authorizeURL, {  });
+            await page.goto(authorizeURL, { waitUntil: [ "networkidle2" ] });
             
             await page.focus('input#login-username');
             await page.keyboard.type(process.env.SPOTIFY_USER);
@@ -92,11 +94,13 @@ const load_auth_code = async () =>
             catch(e)
             {
                 // Skip
+                resolve();
             }
         }
         catch(e)
         {
             // Skip
+            resolve();
         }
     });
 
