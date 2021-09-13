@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "main": "runner.js",
   "devDependencies": {
-    "jsfuzz": "^1.0.15"
+    "glob": "^7.1.7",
+    "jsfuzz": "^1.0.15",
+    "nyc": "^15.1.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node runner.js"
   },
   "repository": {
     "type": "git",

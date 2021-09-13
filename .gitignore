@@ -5,3 +5,6 @@ node_modules
 src/data
 src/tmp
 src/core/shazam/script.py
+testing/fuzz/.nyc_output
+testing/fuzz/corpus
+testing/fuzz/coverage
