@@ -1,11 +1,10 @@
 Task workers - parallelise the task scheduler (done)
 Containerise (done)
+Linting (done)
 
-Linting (in progress)
-
+Unit testing
+CI/CD
 Dynamic sampling of video audio
 Add to UnRaid community apps
 Nicer logging incl. progress
 Use generator functions/async iterators in task scheduler instead of while loops
-Unit testing
-CI/CD

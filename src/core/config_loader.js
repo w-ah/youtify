@@ -7,7 +7,7 @@ const os = require('os');
 // includes
 const store = require('./store');
 
-const CONFIG_PATH = path.resolve(__dirname, '../config.yml')
+const CONFIG_PATH = path.resolve(store.paths.config, 'config.yml')
 
 const load = () => 
 {
