@@ -20,7 +20,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.6.1",
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "jsfuzz": "^1.0.15"
   },
   "dependencies": {
     "better-sqlite3": "^7.4.3",
