@@ -16,8 +16,8 @@
     "type": "git",
     "url": "https://gitlab.app.whenderson.net/wah/youtify.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Will Henderson",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.6.1",
     "eslint": "^7.32.0",
