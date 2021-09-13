@@ -1,0 +1,12 @@
+nodejs-extensions:
+    - .js
+
+# ignore-filenames:
+
+ignore-paths:
+    - data
+    - tmp
+    - ssl
+    - config
+
+# ignore-extensions:
