@@ -1,0 +1,10 @@
+services:
+    youtify:
+        build: . # Build from Dockerfile in this dir
+        # security_opt: 
+        #     - seccomp:chrome.json
+        environment:
+            - "SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}"
+            - "SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}"
+            - "SPOTIFY_USER=${SPOTIFY_USER}"
+            - "SPOTIFY_PASS=${SPOTIFY_PASS}"
