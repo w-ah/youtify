@@ -2,10 +2,11 @@ Task workers - parallelise the task scheduler (done)
 Containerise (done)
 Linting (done)
 
-Fuzz Testing (in progress)
+Testing (in progress)
+    Fuzz (done)
+    SAST (in progress)
 CI/CD (in progress)
 
-Unit testing
 Dynamic sampling of video audio
 Add to UnRaid community apps
 Nicer logging incl. progress
