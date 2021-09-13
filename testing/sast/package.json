@@ -1,0 +1,17 @@
+{
+  "name": "sast",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node runner.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.app.whenderson.net/wah/youtify.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

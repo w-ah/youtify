@@ -11,7 +11,8 @@
     "build:docker": "sh build_scripts/docker.sh",
     "start:docker": "sudo docker-compose up",
     "lint": "npx eslint src",
-    "fuzz": "node testing/fuzz/runner.js"
+    "fuzz": "node testing/fuzz/runner.js",
+    "sast": "node testing/sast/runner.js"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "npm": "^7.0.0"
   },
   "workspaces": [
-    "testing/fuzz"
+    "testing/fuzz",
+    "testing/sast"
   ]
 }

@@ -3,7 +3,7 @@ const wait = require('./../../src/core/utils/wait');
 
 async function fuzz(bytes)
 {
-    const ms = Math.min(Math.max(Number(bytes), 0), 30 * 1000);
+    const ms = Math.min(Math.max(Number(bytes), 0), 100);
     try 
     {
         await Promise.all([
