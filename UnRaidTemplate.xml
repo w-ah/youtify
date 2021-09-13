@@ -1,0 +1,62 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <Container version="2">
+    <Name Default="Youtify">Youtify</Name>
+    <Overview>
+        Youtify is an application to create auto-updating playlists of music detected in a specified list of youtube channels.
+   </Overview>
+   <Registry>https://registry.gitlab.app.whenderson.net/wah/youtify</Registry>
+   <Repository>wah/youtify</Repository>
+   <Privileged>false</Privileged>
+   <Support>https://gitlab.app.whenderson.net/wah/youtify</Support>
+   <Network Default="host">bridge</Network>
+   <Icon>http://d2631fvi2jdnb6.cloudfront.net/docker/limetech/plex.png</Icon>
+   <Category>MediaApp:Music MediaServer:Photos Status:Stable</Category>
+   <Config 
+       Type="Path" 
+       Name="Config directory" 
+       Target="/config" 
+       Default="/mnt/user/appdata/youtify/config" 
+       Mode="rw" 
+       Description="This is where youtify will store it's configuration."
+       Required="true">/mnt/user/appdata/youtify/config</Config>
+    <Config 
+       Type="Path" 
+       Name="Config directory" 
+       Target="/data" 
+       Default="/mnt/user/appdata/youtify/data" 
+       Mode="rw" 
+       Description="This is where youtify will store it's data and databases."
+       Required="true">/mnt/user/appdata/youtify/data</Config>
+    <Config 
+       Type="Variable" 
+       Name="Spotify Client Id" 
+       Target="SPOTIFY_CLIENT_ID" 
+       Default="" 
+       Description="Spotify Client Id" 
+       Mask="false" 
+       Required="true"></Config>
+    <Config 
+       Type="Variable" 
+       Name="Spotify Client Secret" 
+       Target="SPOTIFY_CLIENT_SECRET" 
+       Default="" 
+       Description="Spotify Client Secret" 
+       Mask="false" 
+       Required="true"></Config>
+    <Config 
+       Type="Variable" 
+       Name="Spotify Username" 
+       Target="SPOTIFY_USER" 
+       Default="" 
+       Description="Spotify Username" 
+       Mask="false" 
+       Required="true"></Config>
+    <Config 
+       Type="Variable" 
+       Name="Spotify Password" 
+       Target="SPOTIFY_PASS" 
+       Default="" 
+       Description="Spotify Password" 
+       Mask="false" 
+       Required="true"></Config>
+ </Container>
