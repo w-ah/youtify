@@ -20,8 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.6.1",
-    "eslint": "^7.32.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint": "^7.32.0"
   },
   "dependencies": {
     "better-sqlite3": "^7.4.3",
@@ -30,5 +29,9 @@
     "puppeteer": "^10.2.0",
     "spotify-web-api-node": "^5.0.2",
     "wordpos": "^2.1.0"
+  },
+  "engines": {
+    "node": "^16.4.0",
+    "npm": "^7.0.0"
   }
 }
