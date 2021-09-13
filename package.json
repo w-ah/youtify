@@ -12,7 +12,9 @@
     "start:docker": "sudo docker-compose up",
     "lint": "npx eslint src",
     "fuzz": "node testing/fuzz/runner.js",
-    "sast": "node testing/sast/runner.js"
+    "sast": "node testing/sast/runner.js",
+    "audit:snyk": "npx snyk test",
+    "audit:npm": "npm audit"
   },
   "repository": {
     "type": "git",
@@ -22,7 +24,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.6.1",
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "snyk": "^1.709.0"
   },
   "dependencies": {
     "better-sqlite3": "^7.4.3",
