@@ -1,0 +1,18 @@
+{
+  "name": "fuzz",
+  "version": "1.0.0",
+  "main": "runner.js",
+  "devDependencies": {
+    "jsfuzz": "^1.0.15"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.app.whenderson.net/wah/youtify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

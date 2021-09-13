@@ -10,7 +10,8 @@
     "start:trace": "node --trace-warnings src",
     "build:docker": "sh build_scripts/docker.sh",
     "start:docker": "sudo docker-compose up",
-    "lint": "npx eslint src"
+    "lint": "npx eslint src",
+    "fuzz": "node testing/fuzz/runner.js"
   },
   "repository": {
     "type": "git",
@@ -20,8 +21,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.6.1",
-    "eslint": "^7.32.0",
-    "jsfuzz": "^1.0.15"
+    "eslint": "^7.32.0"
   },
   "dependencies": {
     "better-sqlite3": "^7.4.3",
@@ -34,5 +34,8 @@
   "engines": {
     "node": "^16.4.0",
     "npm": "^7.0.0"
-  }
+  },
+  "workspaces": [
+    "testing/fuzz"
+  ]
 }
