@@ -4,10 +4,11 @@ const path = require('path');
 
 // includes
 const store = require('./store');
-const queue = require('./task_queue');
+const Queue = require('./task_queue');
 const youtify = require('./youtify_task');
 const { wait_min, wait_ms } = require('./utils/wait');
 
+const queue = new Queue();
 const TASKS = [];
 
 const run = async () => 

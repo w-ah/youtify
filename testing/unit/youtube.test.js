@@ -6,7 +6,7 @@ describe('youtube', () =>
 {
     describe('#get_channel_video_urls', () => 
     {
-        test.concurrent('it should get youtube urls from user', async () => 
+        test.concurrent('should get youtube urls from user', async () => 
         {
             const urls = await youtube.get_channel_video_urls("bbc");
 
@@ -14,7 +14,7 @@ describe('youtube', () =>
             expect(urls.length).toBeGreaterThanOrEqual(0);
         }, 30_000);
 
-        test.concurrent('it should get youtube urls from channel', async () => 
+        test.concurrent('should get youtube urls from channel', async () => 
         {
             const urls = await youtube.get_channel_video_urls("bbcsport");
 
@@ -22,7 +22,7 @@ describe('youtube', () =>
             expect(urls.length).toBeGreaterThanOrEqual(0);
         }, 30_000);
 
-        test.concurrent('it should be case insensitive', async () => 
+        test.concurrent('should be case insensitive', async () => 
         {
             const urls = await youtube.get_channel_video_urls("BbCsPoRt");
 

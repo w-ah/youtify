@@ -1,29 +1,29 @@
-const QUEUE = [];
-
-const has_next = () => 
+const Queue =  class Queue 
 {
-    return QUEUE.length > 0;
+    constructor()
+    {
+        this.QUEUE = [];
+    }
+
+    has_next = () => 
+    {
+        return this.QUEUE.length > 0;
+    }
+
+    size = () => 
+    {
+        return this.QUEUE.length;
+    }
+
+    enqueue = (d) => 
+    {
+        this.QUEUE.push(d);
+    }
+
+    dequeue = () => 
+    {
+        return this.QUEUE.splice(0, 1)[0];
+    }
 }
 
-const size = () => 
-{
-    return QUEUE.length;
-}
-
-const enqueue = (task) => 
-{
-    QUEUE.push(task);
-}
-
-const dequeue = () => 
-{
-    const task = QUEUE.splice(0, 1)[0];
-    return task;
-}
-
-module.exports = {
-    has_next,
-    size,
-    enqueue,
-    dequeue
-}
+module.exports = Queue;
