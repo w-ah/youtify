@@ -5,7 +5,6 @@ sudo yum install ffmpeg sox python3 python-pip3 youtube-dl -y
 
 # install python packages
 pip3 install shazamio
-pip install njsscan
 
 # install node packages
 sudo ln -s "$(which node)" /usr/bin/node

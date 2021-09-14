@@ -4,15 +4,15 @@
   "description": "App that takes the name of a youtube channel and creates an auto updating spotify playlist of all the music used in the channel.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build_scripts/build.js",
+    "build:docker": "sh build_scripts/docker.sh",
     "start": "node src",
     "start:trace": "node --trace-warnings src",
-    "build:docker": "sh build_scripts/docker.sh",
     "start:docker": "sudo docker-compose up",
     "lint": "npx eslint src",
-    "fuzz": "node testing/fuzz/runner.js",
-    "sast": "node testing/sast/runner.js",
+    "test:unit": "npm run -w testing/unit test",
+    "test:fuzz": "node testing/fuzz/runner.js",
+    "test:sast": "node testing/sast/runner.js",
     "audit:snyk": "npx snyk test",
     "audit:npm": "npm audit"
   },
@@ -41,6 +41,7 @@
   },
   "workspaces": [
     "testing/fuzz",
-    "testing/sast"
+    "testing/sast",
+    "testing/unit"
   ]
 }

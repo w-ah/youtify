@@ -4,7 +4,8 @@ Linting (done)
 
 Testing (in progress)
     Fuzz (done)
-    SAST (in progress)
+    SAST (done)
+    Unit (in progress)
 CI/CD (in progress)
 
 Dynamic sampling of video audio
