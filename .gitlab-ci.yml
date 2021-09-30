@@ -1,0 +1,27 @@
+image: node:latest
+
+stages:
+  # - build
+  - test
+
+cache:
+  paths:
+    - node_modules/
+
+# build-code-job:
+#   stage: build
+#   script:
+#     - echo "Check the ruby version, then build some Ruby project files:"
+#     - ruby -v
+#     - rake
+
+test-code-unit:
+  stage: test
+  script:
+   - npm run test:unit
+
+# test-code-job2:
+#   stage: test
+#   script:
+#     - echo "If the files are built successfully, test other files with a different command:"
+#     - rake test2
