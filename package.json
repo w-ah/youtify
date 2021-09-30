@@ -4,7 +4,7 @@
   "description": "App that takes the name of a youtube channel and creates an auto updating spotify playlist of all the music used in the channel.",
   "main": "index.js",
   "scripts": {
-    "build": "node build_scripts/build.js",
+    "install": "node build_scripts/install.js",
     "build:docker": "sh build_scripts/docker.sh",
     "start": "node src",
     "start:trace": "node --trace-warnings src",

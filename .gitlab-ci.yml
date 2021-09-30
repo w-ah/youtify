@@ -1,12 +1,19 @@
 image: node:latest
 
 stages:
+  - install
   # - build
+  - audit
   - test
 
 cache:
   paths:
     - node_modules/
+
+install:
+  stage: install
+  script:
+    - npm run install
 
 # build-code-job:
 #   stage: build
@@ -15,10 +22,20 @@ cache:
 #     - ruby -v
 #     - rake
 
-test-code-unit:
+test-unit:
   stage: test
   script:
-   - npm run test:unit
+    - npm run test:unit
+
+audit-snyk:
+  stage: audit
+  script:
+   - npm run audit:snyk
+
+audit-npm:
+  stage: audit
+  script:
+   - npm run audit:npm
 
 # test-code-job2:
 #   stage: test
