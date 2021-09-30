@@ -1,19 +1,19 @@
 image: node:latest
 
 stages:
-  - install
+  # - install
   # - build
-  - audit
+  # - audit
   - test
 
-cache:
-  paths:
-    - node_modules/
+# cache:
+#   paths:
+#     - node_modules/
 
-install:
-  stage: install
-  script:
-    - npm run install
+# install:
+#   stage: install
+#   script:
+#     - npm run install
 
 # build-code-job:
 #   stage: build
@@ -25,17 +25,18 @@ install:
 test-unit:
   stage: test
   script:
+    - npm run install
     - npm run test:unit
 
-audit-snyk:
-  stage: audit
-  script:
-   - npm run audit:snyk
+# audit-snyk:
+#   stage: audit
+#   script:
+#    - npm run audit:snyk
 
-audit-npm:
-  stage: audit
-  script:
-   - npm run audit:npm
+# audit-npm:
+#   stage: audit
+#   script:
+#    - npm run audit:npm
 
 # test-code-job2:
 #   stage: test
